@@ -54,12 +54,67 @@ function get_default_category_list(){
  */
 function decode_bit_array(str_bit_array, array_of_eight_categories){
   // first, remove the first 4 characters (the unique ID plus a space)
+  str_bit_array = str_bit_array.substring(4); // 0-based, meaning start at character 5 (inclusive)
   
   // second, translate any extra characters into their forbidden character 
   // (double quote is forbidden; use a non-bit-array character to encode)
   
   // third, loop through each category and each of its subcategories
   
-  // use bitwise operators to see if the subcategory minor id (always 0-8)
+  // use bitwise operators to see if the subcategory minor id (always 1-9) is marked as hidden
   ('a'.charCodeAt(0) & 00001).toString(2)
+  
+  array_of_eight_characters.sort(function(a, b){
+    return (a.id - b.id); // sort by id, lowest first
+  });
+  major_count = 0;
+  for (major_category in array_of_eight_categories){
+    if (array_of_eight_categories.hasOwnProperty(major_category)){
+      
+      major_category.minor_categories.sort(function(a, b){
+        return (a.id - b.id); // sort by id, lowest first
+      });
+      
+      //hasOwnProperty makes sure we aren't looking at inhereted members
+      id = major_category.id;
+      bit_character = major_category.charAt(start_padding + major_count);
+      
+      shift_count = 0; // even if minor category 3 doesn't exist, it might in the future, so make a flag based on minor id 1-9 instead of merely positional (which major categories do due to 100 possibilities and not enough space)
+      for (minor_category in major_category.minor_categories){
+        if (major_category.minor_categories.hasOwnProperty(minor_category)){
+          minor_category.hidden = is_category_hidden(bit_character, shift_count);
+          shift_count += 1;
+          if (shift_count > 4) {
+            // move to the second character and reset the bit shift counter
+            bit_character = major_category.charAt(start_padding + (major_count * 2) + 1);
+          }
+        }
+      }
+      
+      for (i = 0; i < 4; i++){
+        // first 5 sub-categories
+        
+      }
+      major_count +=1; // each major category gets two characters in the bit array
+      bit_character = 
+      for (i = 0; i < 3; i++) {
+        // next 4 categories, plus the last one for the major category flag
+        
+      }
+      
+      major_count +=1;
+      
+    }
+    
+  }
+}
+
+/**
+ * Returns true if the bit location is set to true.
+ */
+function is_category_hidden(ascii_character, shift_count){
+  category_id = category_id; // bit flags are 0-based, and ids start at 1
+  is_hidden = 0;
+  bit_character = (bit_character.charCodeAt(0)); // get binary representation
+  return ((bit_character >>> category_id) & 000001); // shift the bits over and mask with '1'. if both are 1, it will return 1 (true) for hidden
 }
