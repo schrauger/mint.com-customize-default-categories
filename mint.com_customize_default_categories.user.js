@@ -13,3 +13,29 @@
 // ==/UserScript==
 /*jslint browser: true*/
 /*global jQuery*/
+
+
+// Need to define all categories and subcategories, along with their ID. Create this list dynamically.
+function get_default_category_list(){
+  categories = [];
+  category_major = [];
+  categories_minor = [];
+  category_minor = [];
+  
+  // loop through each category and create an array of arrays with their info
+  jQuery('#popup-cc-L1 > li').each(function(){
+    category_major.id = jQuery(this).attr('id').replace(/\D/g, ''); // number-only portion (they all start with 'pop-categories-'{number}
+    category_major.name = jQuery(this).children('a').text();
+    
+    /* get the minor/sub categories. only the :first ul, because the second one is
+       user-defined custom categories, which they can change with native mint.com controls
+       */
+    jQuery(this).find('div.popup-cc-L2 ul:first > li').each(function(){
+      category_minor.id = jQuery(this).attr('id').replace(/\D/g, ''); ;
+      category_minor.name = jQuery(this).text();
+      category_major.categories_minor.push(category_minor);
+    });
+    
+    categories.push(categories_major);
+  });
+}
