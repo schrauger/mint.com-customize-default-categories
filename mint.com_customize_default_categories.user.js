@@ -26,6 +26,7 @@ function get_default_category_list(){
   jQuery('#popup-cc-L1 > li').each(function(){
     category_major.id = jQuery(this).attr('id').replace(/\D/g, ''); // number-only portion (they all start with 'pop-categories-'{number}
     category_major.name = jQuery(this).children('a').text();
+    category_major.categories_minor = [];
     
     /* get the minor/sub categories. only the :first ul, because the second one is
        user-defined custom categories, which they can change with native mint.com controls
@@ -36,6 +37,29 @@ function get_default_category_list(){
       category_major.categories_minor.push(category_minor);
     });
     
-    categories.push(categories_major);
+    categories.push(category_major);
   });
+}
+// Somehow save any categories the user wants hidden.
+// This will be done by creating a custom subcategory in the 'uncategorized' category, where the name of this
+// subcategory will define which other categories to hide.
+// This way, if the userscript is installed on multiple computers, the user sees their preferences synced.
+// Alternatively, a cookie could be used, but preferences would be specific to that device.
+
+/**
+ * @str_bit_array String A printable-ascii encoded bit array (values that can be saved in a custom category)
+ * @array_of_eight_categories Array 8 categories with their subcategories and 
+ *                                  ID, name, subcategories and is_hidden members 
+ *                                  for both the category and subcategories
+ */
+function decode_bit_array(str_bit_array, array_of_eight_categories){
+  // first, remove the first 4 characters (the unique ID plus a space)
+  
+  // second, translate any extra characters into their forbidden character 
+  // (double quote is forbidden; use a non-bit-array character to encode)
+  
+  // third, loop through each category and each of its subcategories
+  
+  // use bitwise operators to see if the subcategory minor id (always 0-8)
+  ('a'.charCodeAt(0) & 00001).toString(2)
 }
