@@ -19,6 +19,7 @@ var unique_id_length = 4; // the bit array starts with '#!1 ' or '#!2 ' or '#!3 
 var categories_per_string = 8; // with 20 characters per string, and 2 characters per category, we can fit 8 (plus the 4-char unique id)
 var characters_per_category = 2; // with 6 flags, this allows for 11 sub categories and 1 major category
 var number_of_bit_arrays = 3; // use 3 arrays to store all preferences.
+var category_id = 20; // save the custom fields in the 'uncategorized' major category, which has the id of 20
 
 // Need to define all categories and subcategories, along with their ID. Create this list dynamically.
 function get_default_category_list() {
@@ -78,7 +79,6 @@ function decode_bit_array(str_bit_array_array, array_of_all_categories) {
     });
 
 
-
     var field_count = 0; // 0, 1, or 2; for the 3 unique fields holding the 23 category hidden attributes
     var bit_string_category_count = 0; // only 8 categories per string. once this goes past 7, reset and use next string.
     var str_bit_array = str_bit_array_array[field_count]; // 3 custom fields with attributes
@@ -134,7 +134,7 @@ function is_category_hidden(ascii_characters, minor_id) {
     return is_hidden;
 }
 
-function encode_category_hidden(ascii_characters, minor_id, is_hidden){
+function encode_category_hidden(ascii_characters, minor_id, is_hidden) {
     var bit_shift_count = ((minor_id - 1) % bit_flags_per_char); // category 1 is stored in last bit flag; cat 2 in the second to last. cat 7 stored in last flag
     var bit_to_use = (Math.floor((minor_id - 1) / bit_flags_per_char)); // 1-6 (0-5) in first bit. 7-12 (6-11) stored in second. etc. 7/6 floored is 1.
     var mask = ((is_hidden << bit_shift_count)); // move the mask to the proper location
@@ -171,13 +171,12 @@ function extract_mint_array() {
     var str_bit_array_array = [];
     jQuery('ul.popup-cc-L2-custom > li > input[value^="#!"]').each(function () {
         str_bit_array_array.push(jQuery(this).val());
-        jQuery(this).parent().hide(); // comment this out in order to see the bit string data
+        //jQuery(this).parent().hide(); // comment this out in order to see the bit string data
     });
     return str_bit_array_array;
-
 }
 
-function encode_bit_array(array_of_all_categories){
+function encode_bit_array(array_of_all_categories) {
     // loop through each category, create an ASCII character, and replace illegal characters
 
     array_of_all_categories.sort(function (a, b) {
@@ -189,7 +188,7 @@ function encode_bit_array(array_of_all_categories){
     var str_bit_array_array = [];
 
     // loop through each major category and its minor categories and mark them as hidden or not
-    str_bit_array_array[field_count] = new Array(characters_per_category * categories_per_string + 1).join( '@' );
+    str_bit_array_array[field_count] = new Array(characters_per_category * categories_per_string + 1).join('@');
     for (var category_major_count = 0, category_major_length = array_of_all_categories.length; category_major_count < category_major_length; category_major_count++) {
 
         var category_major = array_of_all_categories[category_major_count];
@@ -199,7 +198,7 @@ function encode_bit_array(array_of_all_categories){
         });
 
 
-        var bit_characters = new Array(characters_per_category + 1).join( '@' ); // the @ character is 01000000, so all flags (last 6) start 'off'.
+        var bit_characters = new Array(characters_per_category + 1).join('@'); // the @ character is 01000000, so all flags (last 6) start 'off'.
         for (var category_minor_count = 0, category_minor_length = category_major.categories_minor.length; category_minor_count < category_minor_length; category_minor_count++) {
 
             var minor_id = category_major.categories_minor[category_minor_count].id.slice(-2); // the last two digits are the minor category; the first two are always the same as the parent major category
@@ -218,33 +217,113 @@ function encode_bit_array(array_of_all_categories){
             // each of our custom bit arrays can only hold 8 categories' info. reset the counter and move on to the next bit array
             bit_string_category_count = 0;
             field_count += 1;
-            str_bit_array_array[field_count] = new Array(characters_per_category * categories_per_string + 1).join( '@' );
+            str_bit_array_array[field_count] = new Array(characters_per_category * categories_per_string + 1).join('@');
         }
     }
     // now that all 3 bit arrays are creates, tack on the unique id to the string
-    for (var i=0; i < number_of_bit_arrays; i++){
+    for (var i = 0; i < number_of_bit_arrays; i++) {
         str_bit_array_array[i] = '#!' + (i + 1) + ' ' + str_bit_array_array[i];
-        console.log(str_bit_array_array[i]);
+        str_bit_array_array[i] = translate_to_mint(str_bit_array_array[i]);
+        //console.log(str_bit_array_array[i]);
     }
     return str_bit_array_array;
 }
 
+
 /**
- * Loads the categories and hides the user specified ones.
+ * Will update or insert as needed.
+ * @param bit_string
  */
-function init() {
-    var str_bit_array_array = extract_mint_array();
-    var default_categories = get_default_category_list();
-    decode_bit_array(str_bit_array_array, default_categories);
+function upsert_field(bit_string) {
+    var unique_id = bit_string.substr(0, unique_id_length);
+    var input_id = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]').prev().val();
+    if (input_id) {
+        update_field(bit_string);
+    } else {
+        insert_field(bit_string);
+    }
+}
+
+function insert_field(bit_string) {
+    var hidden_token = JSON.parse(jQuery('#javascript-user').val()).token;
+    data = {
+        pcatId: category_id,
+        catId: 0,
+        category: bit_string,
+        task: 'C',
+        token: hidden_token
+    }
+    jQuery.ajax(
+        {
+            type: "POST",
+            url: '/updateCategory.xevent',
+            data: data
+        }
+    );
+}
+function update_field(bit_string) {
+    var hidden_token = JSON.parse(jQuery('#javascript-user').val()).token;
+    var unique_id = bit_string.substr(0, unique_id_length);
+    var input_id = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]').prev().val();
+    data = {
+        pcatId: category_id,
+        catId: input_id,
+        category: bit_string,
+        task: 'U',
+        token: hidden_token
+    }
+    jQuery.ajax(
+        {
+            type: "POST",
+            url: '/updateCategory.xevent',
+            data: data
+        }
+    );
+}
+
+function delete_field(bit_string) {
+    var hidden_token = JSON.parse(jQuery('#javascript-user').val()).token;
+    var unique_id = bit_string.substr(0, unique_id_length);
+    var input_id = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]').prev().val();
+    data = {
+        catId: input_id,
+        task: 'D',
+        token: hidden_token
+    }
+    jQuery.ajax(
+        {
+            type: "POST",
+            url: '/updateCategory.xevent',
+            data: data
+        }
+    );
 }
 
 /**
- * Saves the preferences
+ * Loop through all the category objects. If any are hidden,
+ * add the proper CSS to hide the field.
+ * @TODO Create toggle to show hidden fields so they can be unhidden
+ * @param default_categories
  */
-function save() {
-    var default_categories = get_default_category_list();
+function process_hidden_categories(default_categories) {
+    for (var major_count = 0; major_count < default_categories.length; major_count++) {
+        for (var minor_count = 0; minor_count < default_categories[major_count].categories_minor.length; minor_count++){
+            if (default_categories[major_count].categories_minor[minor_count].is_hidden){
+                hide_category(default_categories[major_count].categories_minor[minor_count].id);
+            }
+        }
+        if (default_categories[major_count].is_hidden){
+            hide_category(default_categories[major_count].id);
+        }
+    }
+}
 
-    var bit_array_array = encode_bit_array(default_categories);
+function hide_category(category_id){
+    //jQuery('#menu-category-' + category_id).hide();
+    jQuery('#menu-category-' + category_id).addClass('sgs-hide-from-mint');
+    jQuery('#pop-categories-' + category_id).addClass('sgs-hide-from-mint');
+
+    jQuery('.sgs-hide-from-mint').css('text-decoration','line-through');
 }
 
 /**
@@ -253,8 +332,29 @@ function save() {
  * @param character
  * @returns {string}
  */
-String.prototype.replaceAt=function(index, character) {
-    return this.substr(0, index) + character + this.substr(index+character.length);
+String.prototype.replaceAt = function (index, character) {
+    return this.substr(0, index) + character + this.substr(index + character.length);
 }
 
-save();
+/**
+ * Loads the categories and hides the user specified ones.
+ */
+function init() {
+    var str_bit_array_array = extract_mint_array();
+    var default_categories = get_default_category_list();
+    default_categories = decode_bit_array(str_bit_array_array, default_categories);
+    process_hidden_categories(default_categories); // hides the appropriate fields
+}
+
+/**
+ * Saves the preferences
+ */
+function save() {
+    var default_categories = get_default_category_list();
+    var bit_array_array = encode_bit_array(default_categories);
+    for (var i = 0; i < bit_array_array.length; i++) {
+        upsert_field(bit_array_array[i]);
+    }
+}
+
+init();
