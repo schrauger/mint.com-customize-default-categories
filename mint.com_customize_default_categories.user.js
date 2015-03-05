@@ -20,6 +20,7 @@ var categories_per_string = 8; // with 20 characters per string, and 2 character
 var characters_per_category = 2; // with 6 flags, this allows for 11 sub categories and 1 major category
 var number_of_bit_arrays = 3; // use 3 arrays to store all preferences.
 var category_id = 20; // save the custom fields in the 'uncategorized' major category, which has the id of 20
+var class_hidden = 'sgs-hide-from-mint'; // just a unique class; if an element has it, it will be hidden.
 
 // Need to define all categories and subcategories, along with their ID. Create this list dynamically.
 function get_default_category_list() {
@@ -35,7 +36,11 @@ function get_default_category_list() {
         //console.log(category_major.id);
         category_major.name = jQuery(this).children('a').text();
         category_major.categories_minor = [];
-
+        if (jQuery(this).hasClass(class_hidden)) {
+            category_major.is_hidden = true;
+        } else {
+            category_major.is_hidden = false;
+        }
         /* get the minor/sub categories. only the :first ul, because the second one is
          user-defined custom categories, which they can change with native mint.com controls
          */
@@ -43,6 +48,13 @@ function get_default_category_list() {
             var category_minor = [];
             category_minor.id = jQuery(this).attr('id').replace(/\D/g, '');
             category_minor.name = jQuery(this).text();
+            if (jQuery(this).hasClass(class_hidden)) {
+                console.debug('hide');
+                category_minor.is_hidden = true;
+            } else {
+                console.debug('show');
+                category_minor.is_hidden = false;
+            }
             category_major.categories_minor.push(category_minor);
         });
         categories.push(category_major);
@@ -307,23 +319,46 @@ function delete_field(bit_string) {
  */
 function process_hidden_categories(default_categories) {
     for (var major_count = 0; major_count < default_categories.length; major_count++) {
-        for (var minor_count = 0; minor_count < default_categories[major_count].categories_minor.length; minor_count++){
-            if (default_categories[major_count].categories_minor[minor_count].is_hidden){
+        for (var minor_count = 0; minor_count < default_categories[major_count].categories_minor.length; minor_count++) {
+            if (default_categories[major_count].categories_minor[minor_count].is_hidden) {
                 hide_category(default_categories[major_count].categories_minor[minor_count].id);
             }
         }
-        if (default_categories[major_count].is_hidden){
+        if (default_categories[major_count].is_hidden) {
             hide_category(default_categories[major_count].id);
         }
     }
 }
 
-function hide_category(category_id){
-    //jQuery('#menu-category-' + category_id).hide();
+function hide_category(category_id) {
     jQuery('#menu-category-' + category_id).addClass('sgs-hide-from-mint');
     jQuery('#pop-categories-' + category_id).addClass('sgs-hide-from-mint');
 
-    jQuery('.sgs-hide-from-mint').css('text-decoration','line-through');
+    jQuery('.sgs-hide-from-mint').css('text-decoration', 'line-through');
+}
+
+function add_toggle(){
+    var toggle_style = "position: absolute; right: 30px; top: 35px; cursor: pointer";
+    var toggle_text = "Edit Hidden Categories";
+    jQuery('#pop-categories-main').prepend('<div id="sgs-toggle" class="" style="' + toggle_style + '">' + toggle_text + '</div>');
+    jQuery('#sgs-toggle').click(function(){
+        save();
+    });
+}
+
+function edit_categories(){
+    var toggle = jQuery('#sgs-toggle');
+    toggle.toggleClass('editing');
+    if (toggle.hasClass('editing')){
+        toggle.text('Save Hidden Categories');
+        mint_edit(true); // make all categories clickable; when clicked, add class and strike out
+    } else {
+        mint_edit(false); // remove clickable event and strike css; go back to hiding
+        mint_save();
+        toggle.text('Edit Hidden Categories');
+
+    }
+
 }
 
 /**
@@ -339,17 +374,19 @@ String.prototype.replaceAt = function (index, character) {
 /**
  * Loads the categories and hides the user specified ones.
  */
-function init() {
+function mint_init() {
     var str_bit_array_array = extract_mint_array();
     var default_categories = get_default_category_list();
     default_categories = decode_bit_array(str_bit_array_array, default_categories);
     process_hidden_categories(default_categories); // hides the appropriate fields
+    add_toggle();
 }
 
 /**
  * Saves the preferences
  */
-function save() {
+function mint_save() {
+    console.debug('saving');
     var default_categories = get_default_category_list();
     var bit_array_array = encode_bit_array(default_categories);
     for (var i = 0; i < bit_array_array.length; i++) {
@@ -357,4 +394,4 @@ function save() {
     }
 }
 
-init();
+mint_init();
