@@ -60,9 +60,15 @@ function decode_bit_array(str_bit_array_array, array_of_all_categories){
   // third, loop through each category and each of its subcategories
   
   // use bitwise operators to see if the subcategory minor id (always 1-9) is marked as hidden
-  ('a'.charCodeAt(0) & 00001).toString(2)
   
-  array_of_all_characters.sort(function(a, b){
+  var bit_flags_per_char = 6; // using 01XXXXXX ASCII codes, which allows for 6 flags per character
+  var unique_id_length = 4; // the bit array starts with '#!1 ' or '#!2 ' or '#!3 '
+  var categories_per_string = 8; // with 20 characters per string, and 2 characters per category, we can fit 8 (plus the 4-char unique id)
+  var characters_per_category = 2; // with 6 flags, this allows for 11 sub categories and 1 major category
+  
+  str_bit_array_array.sort();
+  
+  array_of_all_categories.sort(function(a, b){
     return (a.id - b.id); // sort by id, lowest first
   });
 
@@ -71,7 +77,7 @@ function decode_bit_array(str_bit_array_array, array_of_all_categories){
   major_count = 0;
   str_bit_array = str_bit_array_array(field_count); // 3 custom fields with attributes
   // remove the first 4 characters (the unique ID plus a space)
-  str_bit_array = str_bit_array.substring(4); // 0-based, meaning start at character 5 (inclusive)
+  str_bit_array = str_bit_array.substring(unique_id_length); // 0-based, meaning start at character 5 (inclusive)
  
   // loop through each major category and its minor categories and mark them as hidden or not
   for (major_category in array_of_all_categories){
@@ -82,7 +88,7 @@ function decode_bit_array(str_bit_array_array, array_of_all_categories){
       
       //hasOwnProperty makes sure we aren't looking at inhereted members
       id = major_category.id;
-      bit_character = major_category.charAt(major_count * 2);
+      bit_character = major_category.charAt(major_count * characters_per_category);
       
       shift_count = 0; // even if minor category 3 doesn't exist, it might in the future, so make a flag based on minor id 1-9 instead of merely positional (which major categories do due to 100 possibilities and not enough space)
       for (minor_category in major_category.minor_categories){
@@ -93,25 +99,25 @@ function decode_bit_array(str_bit_array_array, array_of_all_categories){
           
           // next flag
           shift_count += 1;
-          if (shift_count > 4) {
+          if (shift_count > (bit_flags_per_char - 1)) {
             // move to the second character and reset the bit shift counter
-            // note: this assumes only two characters used (no more than 9 subcategories, in groups of 5 (so 5 and 4)); 
+            // note: this assumes only two characters used (no more than 11 subcategories, in groups of 6 (so 6 and 5 plus the major category)); 
             //       this if statement should only ever be run once within each major category loop.
-            bit_character = major_category.charAt((major_count * 2) + 1);
+            bit_character = major_category.charAt((major_count * characters_per_category) + 1);
             shift_count = 0;
           }
         }
       }
     }
     major_count +=1;
-    if (major_count > 7) {
+    if (major_count > (categories_per_string - 1)) {
       // each of our custom bit arrays can only hold 8 categories' info. reset the counter and move on to the next bit array
       major_count = 0;
       field_count += 1;
       
       str_bit_array = str_bit_array_array(field_count); // 3 custom fields with attributes
       // remove the first 4 characters (the unique ID plus a space)
-      str_bit_array = str_bit_array.substring(4); // 0-based, meaning start at character 5 (inclusive)
+      str_bit_array = str_bit_array.substring(unique_id_length); // 0-based, meaning start at character 5 (inclusive)
     }
   }
   return array_of_all_categories;
@@ -125,4 +131,21 @@ function is_category_hidden(ascii_character, shift_count){
   is_hidden = 0;
   bit_character = (bit_character.charCodeAt(0)); // get binary representation
   return ((bit_character >>> category_id) & 000001); // shift the bits over and mask with '1'. if both are 1, it will return 1 (true) for hidden
+}
+
+/**
+ * Replaces the substituted characters with the 'illegal' characters.
+ * This way, the script can use bitwise operations in a logical manner.
+ */
+function translate_to_script(string_with_substituted_characters){
+  str_return = string_with_substituted_characters.replace('?', Characters.toChars(127)); // the delete char (127) is substitude with a question mark when saved at mint
+  return str_return;
+}
+
+/**
+ * Replaces any illegal characters with substituted characters that mint.com allows in text fields.
+ */
+function translate_to_mint(string_with_illegal_characters){
+  str_return = string_with_illegal_characters.replace(Characters.toChars(127), '?');
+  return str_return;
 }
