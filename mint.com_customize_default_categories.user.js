@@ -2,10 +2,10 @@
 // @name Mint.com Customize Default Categories
 // @namespace com.schrauger.mint.js
 // @author Stephen Schrauger
-// @description Hide or rename default built-in mint.com categories
+// @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/*
-// @version 0.0.2
+// @version 0.9
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -21,6 +21,11 @@ var characters_per_category = 2; // with 6 flags, this allows for 11 sub categor
 var number_of_bit_arrays = 3; // use 3 arrays to store all preferences.
 var category_id = 20; // save the custom fields in the 'uncategorized' major category, which has the id of 20
 var class_hidden = 'sgs-hide-from-mint'; // just a unique class; if an element has it, it will be hidden.
+var class_edit_mode = 'mint_edit_mode';
+
+var hs_action_hide = 'hide';
+var hs_action_show = 'show';
+var hs_action_edit = 'edit';
 
 // Need to define all categories and subcategories, along with their ID. Create this list dynamically.
 function get_default_category_list() {
@@ -49,10 +54,10 @@ function get_default_category_list() {
             category_minor.id = jQuery(this).attr('id').replace(/\D/g, '');
             category_minor.name = jQuery(this).text();
             if (jQuery(this).hasClass(class_hidden)) {
-                console.debug('hide');
+                //console.debug('hide');
                 category_minor.is_hidden = true;
             } else {
-                console.debug('show');
+                //console.debug('show');
                 category_minor.is_hidden = false;
             }
             category_major.categories_minor.push(category_minor);
@@ -183,7 +188,7 @@ function extract_mint_array() {
     var str_bit_array_array = [];
     jQuery('ul.popup-cc-L2-custom > li > input[value^="#!"]').each(function () {
         str_bit_array_array.push(jQuery(this).val());
-        //jQuery(this).parent().hide(); // comment this out in order to see the bit string data
+        jQuery(this).parent().hide(); // comment this out in order to see the bit string data
     });
     return str_bit_array_array;
 }
@@ -321,35 +326,54 @@ function process_hidden_categories(default_categories) {
     for (var major_count = 0; major_count < default_categories.length; major_count++) {
         for (var minor_count = 0; minor_count < default_categories[major_count].categories_minor.length; minor_count++) {
             if (default_categories[major_count].categories_minor[minor_count].is_hidden) {
-                hide_category(default_categories[major_count].categories_minor[minor_count].id);
+                jQuery('#menu-category-' + default_categories[major_count].categories_minor[minor_count].id).addClass(class_hidden);
+                jQuery('#pop-categories-' + default_categories[major_count].categories_minor[minor_count].id).addClass(class_hidden);
             }
         }
         if (default_categories[major_count].is_hidden) {
-            hide_category(default_categories[major_count].id);
+            jQuery('#menu-category-' + default_categories[major_count].id).addClass(class_hidden);
+            jQuery('#pop-categories-' + default_categories[major_count].id).addClass(class_hidden);
+
         }
+    }
+    hide_show_category(hs_action_hide);
+}
+
+/**
+ *
+ * @param action
+ */
+function hide_show_category(action) {
+
+    if (action == hs_action_hide) {
+        // hide the categories completely
+        jQuery('.' + class_hidden).hide();
+        jQuery('.' + class_hidden).css('text-decoration', 'line-through');
+    }
+    if (action == hs_action_show) {
+        // remove any visible attributes
+        jQuery('.' + class_hidden).show();
+        jQuery('.' + class_hidden).css('text-decoration', '');
+    }
+    if (action == hs_action_edit) {
+        jQuery('.' + class_hidden).show();
+        jQuery('.' + class_hidden).css('text-decoration', 'line-through');
     }
 }
 
-function hide_category(category_id) {
-    jQuery('#menu-category-' + category_id).addClass('sgs-hide-from-mint');
-    jQuery('#pop-categories-' + category_id).addClass('sgs-hide-from-mint');
-
-    jQuery('.sgs-hide-from-mint').css('text-decoration', 'line-through');
-}
-
-function add_toggle(){
+function add_toggle() {
     var toggle_style = "position: absolute; right: 30px; top: 35px; cursor: pointer";
     var toggle_text = "Edit Hidden Categories";
     jQuery('#pop-categories-main').prepend('<div id="sgs-toggle" class="" style="' + toggle_style + '">' + toggle_text + '</div>');
-    jQuery('#sgs-toggle').click(function(){
-        save();
+    jQuery('#sgs-toggle').click(function () {
+        edit_categories();
     });
 }
 
-function edit_categories(){
+function edit_categories() {
     var toggle = jQuery('#sgs-toggle');
     toggle.toggleClass('editing');
-    if (toggle.hasClass('editing')){
+    if (toggle.hasClass('editing')) {
         toggle.text('Save Hidden Categories');
         mint_edit(true); // make all categories clickable; when clicked, add class and strike out
     } else {
@@ -361,14 +385,76 @@ function edit_categories(){
 
 }
 
-function mint_edit(edit_mode){
-    if (edit_mode){
-        jQuery('li[id^="pop-categories-"]')
+function mint_edit(edit_mode) {
+    if (edit_mode) {
+        // get the major and minor categories in the popup editor
+        var minor_categories = jQuery('div.popup-cc-L2 > ul:first-of-type > li'); // second ul is custom categories, so just get first
+        var major_categories = jQuery('#popup-cc-L1 .isL1');
+
+
+        // display all previously hidden fields (except our three custom fields holding bit arrays)
+
+
+        // add checkboxes to the categories
+        minor_categories.each(function () {
+            add_checkbox(this);
+        });
+        major_categories.each(function () {
+            add_checkbox(this);
+        })
+        jQuery('input.hide_show_checkbox').css({
+                                                   'position': 'absolute',
+                                                   'right': '-18px'
+                                               });
+
+        // add label for minor checkboxes
+        jQuery('div.popup-cc-L2 > h3:first-of-type').append('<span class="' + class_edit_mode + ' minor_hide_show_label">Hide</span>');
+        jQuery('span.minor_hide_show_label').css({
+                                                     'position': 'absolute',
+                                                     'right': '64px',
+                                                     'top': '3px',
+                                                     'font-size': '13px',
+                                                     'font-weight': 'bold'
+                                                 });
+
+
+        // add label for major categories
+        jQuery('#pop-categories-form fieldset').prepend('<span class="' + class_edit_mode + ' major_hide_show_label">Hide</span>');
+        jQuery('span.major_hide_show_label').css({
+                                                     'position': 'absolute',
+                                                     'left': '267px',
+                                                     'font-size': '13px',
+                                                     'font-weight': 'bold'
+                                                 });
+        // add checkbox event. when checked add the 'hidden' class (which is scanned on save)
+        jQuery('input.hide_show_checkbox').click(function () {
+            if (jQuery(this).is(':checked')) {
+                jQuery(this).parent().addClass(class_hidden);
+                jQuery(this).parent().css('text-decoration', 'line-through');
+            } else {
+                jQuery(this).parent().removeClass(class_hidden);
+                jQuery(this).parent().css('text-decoration', '');
+
+            }
+        });
+        hide_show_category(hs_action_edit);
+    } else {
+        // no longer editing (saving), so remove our labels and checkboxes, and re-hide the desired categories
+        jQuery('.' + class_edit_mode).remove();
+        hide_show_category(hs_action_hide);
     }
 }
 
+function add_checkbox(element) {
+    var checked = '';
+    if (jQuery(element).hasClass(class_hidden)) {
+        // hidden categories are checked
+        checked = 'checked="checked"';
+    }
+    jQuery(element).append('<input type="checkbox" class="' + class_edit_mode + ' hide_show_checkbox"' + checked + ' />');
+}
 /**
- * Allows immutible strings to have character(s) replaced
+ * Allows immutable strings to have character(s) replaced
  * @param index
  * @param character
  * @returns {string}
@@ -392,7 +478,7 @@ function mint_init() {
  * Saves the preferences
  */
 function mint_save() {
-    console.debug('saving');
+    //console.debug('saving');
     var default_categories = get_default_category_list();
     var bit_array_array = encode_bit_array(default_categories);
     for (var i = 0; i < bit_array_array.length; i++) {
