@@ -6,7 +6,7 @@
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/transaction.event
 // @version 0.9
-// @require https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js
+// @require https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
 // @updateURL   https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -67,6 +67,7 @@ function get_default_category_list() {
 
     return categories;
 }
+
 // Somehow save any categories the user wants hidden.
 // This will be done by creating a custom subcategory in the 'uncategorized' category, where the name of this
 // subcategory will define which other categories to hide.
@@ -100,7 +101,7 @@ function decode_bit_array(str_bit_array_array, array_of_all_categories) {
     var bit_string_category_count = 0; // only 8 categories per string. once this goes past 7, reset and use next string.
     var str_bit_array = str_bit_array_array[field_count]; // 3 custom fields with attributes
     // remove the first 4 characters (the unique ID plus a space)
-    var str_bit_array = str_bit_array.substring(unique_id_length); // 0-based, meaning start at character 5 (inclusive)
+    str_bit_array = str_bit_array.substring(unique_id_length); // 0-based, meaning start at character 5 (inclusive)
 
     // loop through each major category and its minor categories and mark them as hidden or not
     for (var category_major_count = 0, category_major_length = array_of_all_categories.length; category_major_count < category_major_length; category_major_count++) {
@@ -186,9 +187,9 @@ function translate_to_mint(string_with_illegal_characters) {
  */
 function extract_mint_array() {
     var str_bit_array_array = [];
-    jQuery('ul.popup-cc-L2-custom > li > input[value^="#!"]').each(function () {
-        str_bit_array_array.push(jQuery(this).val());
-        jQuery(this).parent().hide(); // comment this out in order to see the bit string data
+    jQuery('#menu-category-' + category_id + ' ul li:contains("#!")').each(function () {
+        str_bit_array_array.push(jQuery(this).text());
+        console.log('processing val is ' + jQuery(this).text());
     });
     return str_bit_array_array;
 }
@@ -278,10 +279,19 @@ function insert_field(bit_string) {
         }
     );
 }
+
 function update_field(bit_string) {
+
     var hidden_token = JSON.parse(jQuery('#javascript-user').val()).token;
     var unique_id = bit_string.substr(0, unique_id_length);
-    var input_id = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]').prev().val();
+
+    var input = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]');
+    console.log('setting input string from ' + input.val() + ' to ' + bit_string);
+    input.val(bit_string); // set the value on the user's page manually (not needed for ajax, but needed for later processing)
+    jQuery('#menu-category-' + category_id + ' ul li:contains("' + unique_id + '")').text(bit_string);
+/*    input.prop('value',bit_string);
+    input.attr('value',bit_string);*/
+    var input_id = input.prev().val();
     data = {
         pcatId: category_id,
         catId: input_id,
@@ -327,6 +337,7 @@ function process_hidden_categories(default_categories) {
         for (var minor_count = 0; minor_count < default_categories[major_count].categories_minor.length; minor_count++) {
             if (default_categories[major_count].categories_minor[minor_count].is_hidden) {
                 jQuery('#menu-category-' + default_categories[major_count].categories_minor[minor_count].id).addClass(class_hidden);
+                //console.log('hide minor ' + default_categories[major_count].categories_minor[minor_count].id);
                 jQuery('#pop-categories-' + default_categories[major_count].categories_minor[minor_count].id).addClass(class_hidden);
             }
         }
@@ -428,11 +439,14 @@ function mint_edit(edit_mode) {
                                                  });
         // add checkbox event. when checked add the 'hidden' class (which is scanned on save)
         jQuery('input.hide_show_checkbox').click(function () {
+            parent_id = jQuery(this).parent().attr('id').replace(/\D/g, '');
             if (jQuery(this).is(':checked')) {
-                jQuery(this).parent().addClass(class_hidden);
+                jQuery('#menu-category-' + parent_id).addClass(class_hidden);
+                jQuery('#pop-categories-' + parent_id).addClass(class_hidden);
                 jQuery(this).parent().css('text-decoration', 'line-through');
             } else {
-                jQuery(this).parent().removeClass(class_hidden);
+                jQuery('#menu-category-' + parent_id).removeClass(class_hidden);
+                jQuery('#pop-categories-' + parent_id).removeClass(class_hidden);;
                 jQuery(this).parent().css('text-decoration', '');
 
             }
@@ -453,6 +467,33 @@ function add_checkbox(element) {
     }
     jQuery(element).append('<input type="checkbox" class="' + class_edit_mode + ' hide_show_checkbox"' + checked + ' />');
 }
+
+/**
+ * hooks to the save or cancel button so that hidden categories will be re-hidden after ajax refresh
+ */
+function add_save_hook() {
+    jQuery('#pop-categories-submit, #pop-categories-close').click(function () {
+        mint_refresh();
+    });
+}
+
+function add_dropdown_hook() {
+    //console.log('start dropdown');
+    jQuery('#txnEdit-category_input, #txnEdit-category_picker').bindFirst('click', function () {
+
+        mint_refresh();
+    });
+}
+
+/**
+ * Hides our bit array custom categories permanently so the user won't accidentally mess with them.
+ */
+function hide_bit_array() {
+    jQuery('input[value^="#!"]').parent().hide();
+    jQuery('li[id^="menu-category-"] a:contains("#!")').parent().hide();
+
+}
+
 /**
  * Allows immutable strings to have character(s) replaced
  * @param index
@@ -464,14 +505,43 @@ String.prototype.replaceAt = function (index, character) {
 }
 
 /**
+ * Lets you bind an event and have it run first.
+ * @param name
+ * @param fn
+ */
+jQuery.fn.bindFirst = function(name, fn) {
+    // bind as you normally would
+    // don't want to miss out on any jQuery magic
+    this.on(name, fn);
+
+    // Thanks to a comment by @Martin, adding support for
+    // namespaced events too.
+    this.each(function() {
+        var handlers = jQuery._data(this, 'events')[name.split('.')[0]];
+        // take out the handler we just inserted from the end
+        var handler = handlers.pop();
+        // move it at the beginning
+        handlers.splice(0, 0, handler);
+    });
+};
+
+/**
  * Loads the categories and hides the user specified ones.
  */
 function mint_init() {
+    add_toggle();
+    add_save_hook();
+    add_dropdown_hook();
+    mint_refresh();
+}
+
+function mint_refresh() {
+    // when the popup is opened or closed, re-hide the categories
     var str_bit_array_array = extract_mint_array();
     var default_categories = get_default_category_list();
     default_categories = decode_bit_array(str_bit_array_array, default_categories);
     process_hidden_categories(default_categories); // hides the appropriate fields
-    add_toggle();
+    hide_bit_array(); // comment this out in order to see the bit string data
 }
 
 /**
@@ -486,4 +556,6 @@ function mint_save() {
     }
 }
 
-mint_init();
+jQuery(document).ready(function(){
+    mint_init();
+});
