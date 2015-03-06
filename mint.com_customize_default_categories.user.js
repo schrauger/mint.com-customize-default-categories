@@ -361,6 +361,12 @@ function edit_categories(){
 
 }
 
+function mint_edit(edit_mode){
+    if (edit_mode){
+        jQuery('li[id^="pop-categories-"]')
+    }
+}
+
 /**
  * Allows immutible strings to have character(s) replaced
  * @param index
