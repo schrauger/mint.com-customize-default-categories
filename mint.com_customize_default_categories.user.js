@@ -5,7 +5,7 @@
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/transaction.event
-// @version 1.1.0
+// @version 1.1.1
 // @reqnhuire https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -382,6 +382,10 @@ function after_jquery() {
             jQuery('#sgs-toggle').click(function () {
                 edit_categories();
             });
+            jQuery('#pop-categories-submit').click(function(){
+                jQuery('#sgs-toggle').addClass('editing'); // force the current mode to be editing so the edit_categories call saves
+                edit_categories(); // if user clicks the "I'm done" button, we should also save the categories.
+            })
         }
     }
 
