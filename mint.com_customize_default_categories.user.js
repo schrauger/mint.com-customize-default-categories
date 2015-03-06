@@ -32,22 +32,15 @@ function after_jquery() {
 // Need to define all categories and subcategories, along with their ID. Create this list dynamically.
     function get_default_category_list() {
         var categories = [];
-        //var category_major = [];
-        //var categories_minor = [];
-        var category_minor = [];
 
         // loop through each category and create an array of arrays with their info
-        jQuery('#popup-cc-L1 > li').each(function () {
+        jQuery('#popup-cc-L1').find('> li').each(function () {
             var category_major = [];
             category_major.id = jQuery(this).attr('id').replace(/\D/g, ''); // number-only portion (they all start with 'pop-categories-'{number}
             //console.log(caconsole.logtegory_major.id);
             category_major.name = jQuery(this).children('a').text();
             category_major.categories_minor = [];
-            if (jQuery(this).hasClass(class_hidden)) {
-                category_major.is_hidden = true;
-            } else {
-                category_major.is_hidden = false;
-            }
+            category_major.is_hidden = jQuery(this).hasClass(class_hidden);
             /* get the minor/sub categories. only the :first ul, because the second one is
              user-defined custom categories, which they can change with native mint.com controls
              */
@@ -55,13 +48,7 @@ function after_jquery() {
                 var category_minor = [];
                 category_minor.id = jQuery(this).attr('id').replace(/\D/g, '');
                 category_minor.name = jQuery(this).text();
-                if (jQuery(this).hasClass(class_hidden)) {
-                    //console.debug('hide');
-                    category_minor.is_hidden = true;
-                } else {
-                    //console.debug('show');
-                    category_minor.is_hidden = false;
-                }
+                category_minor.is_hidden = jQuery(this).hasClass(class_hidden);
                 category_major.categories_minor.push(category_minor);
             });
             categories.push(category_major);
@@ -266,13 +253,13 @@ function after_jquery() {
 
     function insert_field(bit_string) {
         var hidden_token = JSON.parse(jQuery('#javascript-user').val()).token;
-        data = {
+        var data = {
             pcatId: category_id,
             catId: 0,
             category: bit_string,
             task: 'C',
             token: hidden_token
-        }
+        };
         jQuery.ajax(
             {
                 type: "POST",
@@ -294,13 +281,13 @@ function after_jquery() {
         /*    input.prop('value',bit_string);
          input.attr('value',bit_string);*/
         var input_id = input.prev().val();
-        data = {
+        var data = {
             pcatId: category_id,
             catId: input_id,
             category: bit_string,
             task: 'U',
             token: hidden_token
-        }
+        };
         jQuery.ajax(
             {
                 type: "POST",
@@ -314,11 +301,11 @@ function after_jquery() {
         var hidden_token = JSON.parse(jQuery('#javascript-user').val()).token;
         var unique_id = bit_string.substr(0, unique_id_length);
         var input_id = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]').prev().val();
-        data = {
+        var data = {
             catId: input_id,
             task: 'D',
             token: hidden_token
-        }
+        };
         jQuery.ajax(
             {
                 type: "POST",
@@ -357,20 +344,20 @@ function after_jquery() {
      * @param action
      */
     function hide_show_category(action) {
-
+        var category = jQuery('.' + class_hidden);
         if (action == hs_action_hide) {
             // hide the categories completely
-            jQuery('.' + class_hidden).hide();
-            jQuery('.' + class_hidden).css('text-decoration', 'line-through');
+            category.hide();
+            category.css('text-decoration', 'line-through');
         }
         if (action == hs_action_show) {
             // remove any visible attributes
-            jQuery('.' + class_hidden).show();
-            jQuery('.' + class_hidden).css('text-decoration', '');
+            category.show();
+            category.css('text-decoration', '');
         }
         if (action == hs_action_edit) {
-            jQuery('.' + class_hidden).show();
-            jQuery('.' + class_hidden).css('text-decoration', 'line-through');
+            category.show();
+            category.css('text-decoration', 'line-through');
         }
     }
 
@@ -408,7 +395,7 @@ function after_jquery() {
         if (edit_mode) {
             // get the major and minor categories in the popup editor
             var minor_categories = jQuery('div.popup-cc-L2 > ul:first-of-type > li'); // second ul is custom categories, so just get first
-            var major_categories = jQuery('#popup-cc-L1 .isL1');
+            var major_categories = jQuery('#popup-cc-L1').find('.isL1');
 
 
             // display all previously hidden fields (except our three custom fields holding bit arrays)
@@ -517,7 +504,7 @@ function after_jquery() {
      */
     String.prototype.replaceAt = function (index, character) {
         return this.substr(0, index) + character + this.substr(index + character.length);
-    }
+    };
 
     /**
      * Lets you bind an event and have it run first.
@@ -539,16 +526,6 @@ function after_jquery() {
             handlers.splice(0, 0, handler);
         });
     };
-
-    /**
-     * Loads the categories and hides the user specified ones.
-     */
-    function mint_init() {
-        add_toggle();
-        add_save_hook();
-        add_dropdown_hook();
-        mint_refresh();
-    }
 
     function mint_refresh() {
         add_toggle();
@@ -576,7 +553,7 @@ function after_jquery() {
     add_dropdown_hook();
     jQuery(document).ajaxComplete(add_dropdown_hook);
 
-};
+}
 
 /**
  * Mint.com loads jquery after page is loaded, and it conflicts with other verions. We can't
@@ -597,4 +574,4 @@ function defer(method) {
 }
 window.onload = function () {
     defer(after_jquery);
-}
+};
