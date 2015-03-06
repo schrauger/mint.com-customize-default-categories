@@ -5,16 +5,17 @@
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/transaction.event
-// @version 1.0
-// @require https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
+// @version 1.1.0
+// @reqnhuire https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
 // @updateURL   https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
 // ==/UserScript==
 /*jslint browser: true*/
 /*global jQuery*/
-jQuery(document).ready(function () {
+function after_jquery() {
 
+    jQuery(document).ajaxComplete(add_dropdown_hook);
     var bit_flags_per_char = 6; // using 01XXXXXX ASCII codes, which allows for 6 flags per character
     var unique_id_length = 4; // the bit array starts with '#!1 ' or '#!2 ' or '#!3 '
     var categories_per_string = 8; // with 20 characters per string, and 2 characters per category, we can fit 8 (plus the 4-char unique id)
@@ -39,7 +40,7 @@ jQuery(document).ready(function () {
         jQuery('#popup-cc-L1 > li').each(function () {
             var category_major = [];
             category_major.id = jQuery(this).attr('id').replace(/\D/g, ''); // number-only portion (they all start with 'pop-categories-'{number}
-            //console.log(category_major.id);
+            //console.log(caconsole.logtegory_major.id);
             category_major.name = jQuery(this).children('a').text();
             category_major.categories_minor = [];
             if (jQuery(this).hasClass(class_hidden)) {
@@ -190,7 +191,7 @@ jQuery(document).ready(function () {
         var str_bit_array_array = [];
         jQuery('#menu-category-' + category_id + ' ul li:contains("#!")').each(function () {
             str_bit_array_array.push(jQuery(this).text());
-            console.log('processing val is ' + jQuery(this).text());
+            //console.log('processing val is ' + jQuery(this).text());
         });
         return str_bit_array_array;
     }
@@ -287,7 +288,7 @@ jQuery(document).ready(function () {
         var unique_id = bit_string.substr(0, unique_id_length);
 
         var input = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]');
-        console.log('setting input string from ' + input.val() + ' to ' + bit_string);
+        //console.log('setting input string from ' + input.val() + ' to ' + bit_string);
         input.val(bit_string); // set the value on the user's page manually (not needed for ajax, but needed for later processing)
         jQuery('#menu-category-' + category_id + ' ul li:contains("' + unique_id + '")').text(bit_string);
         /*    input.prop('value',bit_string);
@@ -570,6 +571,26 @@ jQuery(document).ready(function () {
 
     add_dropdown_hook();
     jQuery(document).ajaxComplete(add_dropdown_hook);
-});
 
+};
 
+/**
+ * Mint.com loads jquery after page is loaded, and it conflicts with other verions. We can't
+ * use a sandbox for our script, either, since we must use their version of jquery in order
+ * to hook into their ajax completion events.
+ * Therefore, we must manually check for jquery every so often (50 ms) until it finally exists.
+ * Then, we can call our jquery-requiring function and modify the page.
+ * @param method
+ */
+function defer(method) {
+    if (window.jQuery) {
+        method();
+    } else {
+        setTimeout(function () {
+            defer(method)
+        }, 50);
+    }
+}
+window.onload = function () {
+    defer(after_jquery);
+}
