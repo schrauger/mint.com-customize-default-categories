@@ -5,7 +5,7 @@
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/transaction.event
-// @version 0.9
+// @version 1.0
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -289,8 +289,8 @@ function update_field(bit_string) {
     console.log('setting input string from ' + input.val() + ' to ' + bit_string);
     input.val(bit_string); // set the value on the user's page manually (not needed for ajax, but needed for later processing)
     jQuery('#menu-category-' + category_id + ' ul li:contains("' + unique_id + '")').text(bit_string);
-/*    input.prop('value',bit_string);
-    input.attr('value',bit_string);*/
+    /*    input.prop('value',bit_string);
+     input.attr('value',bit_string);*/
     var input_id = input.prev().val();
     data = {
         pcatId: category_id,
@@ -373,12 +373,14 @@ function hide_show_category(action) {
 }
 
 function add_toggle() {
-    var toggle_style = "position: absolute; right: 30px; top: 35px; cursor: pointer";
-    var toggle_text = "Edit Hidden Categories";
-    jQuery('#pop-categories-main').prepend('<div id="sgs-toggle" class="" style="' + toggle_style + '">' + toggle_text + '</div>');
-    jQuery('#sgs-toggle').click(function () {
-        edit_categories();
-    });
+    if (!(jQuery('#sgs-toggle').length)) {
+        var toggle_style = "position: absolute; right: 30px; top: 35px; cursor: pointer";
+        var toggle_text = "Edit Hidden Categories";
+        jQuery('#pop-categories-main').prepend('<div id="sgs-toggle" class="" style="' + toggle_style + '">' + toggle_text + '</div>');
+        jQuery('#sgs-toggle').click(function () {
+            edit_categories();
+        });
+    }
 }
 
 function edit_categories() {
@@ -446,7 +448,8 @@ function mint_edit(edit_mode) {
                 jQuery(this).parent().css('text-decoration', 'line-through');
             } else {
                 jQuery('#menu-category-' + parent_id).removeClass(class_hidden);
-                jQuery('#pop-categories-' + parent_id).removeClass(class_hidden);;
+                jQuery('#pop-categories-' + parent_id).removeClass(class_hidden);
+                ;
                 jQuery(this).parent().css('text-decoration', '');
 
             }
@@ -472,17 +475,23 @@ function add_checkbox(element) {
  * hooks to the save or cancel button so that hidden categories will be re-hidden after ajax refresh
  */
 function add_save_hook() {
-    jQuery('#pop-categories-submit, #pop-categories-close').click(function () {
-        mint_refresh();
-    });
+    if ((jQuery('#pop-categories-submit').length && (!(jQuery('#pop-categories-submit').hasClass('sgs-hook-added'))))) {
+
+        jQuery('#pop-categories-submit').addClass('sgs-hook-added');
+        jQuery('#pop-categories-submit, #pop-categories-close').click(function () {
+            mint_refresh();
+        });
+
+    }
 }
 
 function add_dropdown_hook() {
     //console.log('start dropdown');
-    jQuery('#txnEdit-category_input, #txnEdit-category_picker').bindFirst('click', function () {
-
-        mint_refresh();
-    });
+    //if ((jQuery('#txnEdit-category_input').length) && (!(jQuery('#txtEdit-category_input').hasClass('sgs-hook-added')))) {
+        jQuery('#txnEdit-category_input').addClass('sgs-hook-added');
+        jQuery('#txnEdit-category_input, #txnEdit-category_picker').off('click', mint_refresh);
+        jQuery('#txnEdit-category_input, #txnEdit-category_picker').on('click', mint_refresh);
+    //}
 }
 
 /**
@@ -509,14 +518,14 @@ String.prototype.replaceAt = function (index, character) {
  * @param name
  * @param fn
  */
-jQuery.fn.bindFirst = function(name, fn) {
+jQuery.fn.bindFirst = function (name, fn) {
     // bind as you normally would
     // don't want to miss out on any jQuery magic
     this.on(name, fn);
 
     // Thanks to a comment by @Martin, adding support for
     // namespaced events too.
-    this.each(function() {
+    this.each(function () {
         var handlers = jQuery._data(this, 'events')[name.split('.')[0]];
         // take out the handler we just inserted from the end
         var handler = handlers.pop();
@@ -536,6 +545,8 @@ function mint_init() {
 }
 
 function mint_refresh() {
+    add_toggle();
+    add_save_hook();
     // when the popup is opened or closed, re-hide the categories
     var str_bit_array_array = extract_mint_array();
     var default_categories = get_default_category_list();
@@ -556,6 +567,8 @@ function mint_save() {
     }
 }
 
-jQuery(document).ready(function(){
-    mint_init();
-});
+
+jQuery(document).ready(add_dropdown_hook)
+
+jQuery(document).ajaxComplete(add_dropdown_hook);
+
