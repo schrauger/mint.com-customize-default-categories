@@ -4,7 +4,7 @@
 // @author Stephen Schrauger
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
-// @include https://*.mint.com/*
+// @include https://*.mint.com/transaction.event
 // @version 0.9
 // @require https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js
 // @grant none
