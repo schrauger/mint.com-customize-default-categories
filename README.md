@@ -41,10 +41,10 @@ The categories should now be hidden from the categories dropdown list.
 
 If you want to restore any hidden categories, follow these steps again, removing the checkmark from the previously hidden categories. 
 
-[editing]: /images/category_edit.png?raw=true "Editing hidden categories"
-[visible]: /images/category_view.png?raw=true "Customized visible categories"
-[all]:     /images/dropdown_all.png?raw=true "All categories shown"
-[custom]:  /images/dropdown_custom.png?raw=true "Customized visible categories"
+[editing]: /images/category-edit.png?raw=true "Editing hidden categories"
+[visible]: /images/category-view.png?raw=true "Customized visible categories"
+[all]:     /images/dropdown-all.png?raw=true "All categories shown"
+[custom]:  /images/dropdown-custom.png?raw=true "Customized visible categories"
 ### Editing Hidden Categories
 ![Editing categories][editing]
 ### Visible Categories After Saving
