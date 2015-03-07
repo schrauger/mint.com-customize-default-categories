@@ -40,3 +40,9 @@ When you have finished going through all the top level categories and choosing y
 The categories should now be hidden from the categories dropdown list.
 
 If you want to restore any hidden categories, follow these steps again, removing the checkmark from the previously hidden categories. 
+
+## Known Issues
+* New versions of Chrome prevent the script from installing.
+ * Solution: Open a new window and go to the url "chrome:extensions". Then drag-and-drop the [script url][script] onto the extensions page, where Chrome will then let you install the script.
+* The categories show up if I click on a category quickly
+ * This is a bug I am trying to fix. Currently, the solution is to refresh the page, and wait a second or two before beginning to modify your transactions. Mint loads jQuery in a non-standard way, and I've had to work around some of their ajax-heavy code.
