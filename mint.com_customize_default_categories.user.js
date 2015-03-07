@@ -5,7 +5,8 @@
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/transaction.event
-// @version 1.1.1
+// @include https://*.mint.com/transaction.event*
+// @version 1.1.2
 // @reqnhuire https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
