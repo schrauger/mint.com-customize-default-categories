@@ -9,7 +9,7 @@ This script gives you control over these built-in categories. You can hide any s
 
 
 ## How to Use
-After the script is installed and enabled, you will need to set your preferences. On the [Transactions page][transactions], click on the Category dropdown field of the current transaction, hover over any of the top level categories, and click on the sub-category link `Add/Edit Categories`. This is where you would go if you wanted to add a custom category (which Mint lets you do natively).
+After the script is installed and enabled, you will need to set your preferences. On the [Transactions page](https://wwws.mint.com/transaction.event), click on the Category dropdown field of the current transaction, hover over any of the top level categories, and click on the sub-category link `Add/Edit Categories`. This is where you would go if you wanted to add a custom category (which Mint lets you do natively).
 
 Click on the top-right link that says `Edit Hidden Categories`. You will then see checkboxes next to each category and sub-category. Place a checkmark in the checkbox of the categories you want to hide. Their text will be crossed out. 
 
