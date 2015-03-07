@@ -41,6 +41,18 @@ The categories should now be hidden from the categories dropdown list.
 
 If you want to restore any hidden categories, follow these steps again, removing the checkmark from the previously hidden categories. 
 
+[editing]: /images/category_edit.png?raw=true "Editing hidden categories"
+[visible]: /images/category_view.png?raw=true "Customized visible categories"
+[all]:     /images/dropdown_all.png?raw=true "All categories shown"
+[custom]:  /images/dropdown_custom.png?raw=true "Customized visible categories"
+### Editing Hidden Categories
+![Editing categories][editing]
+### Visible Categories After Saving
+![Visible categories][visible]
+### Script disabled - all categories
+![All categories dropdown][all]
+### Script enabled - custom categories
+![Custom categories dropdown][custom]
 ## Known Issues
 * New versions of Chrome prevent the script from installing.
  * Solution: Open a new window and go to the url "chrome:extensions". Then drag-and-drop the [script url][script] onto the extensions page, where Chrome will then let you install the script.
