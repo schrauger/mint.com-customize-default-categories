@@ -4,7 +4,7 @@ This userscript lets you hide default built-in categories in mint.com.
 ## Purpose
 Mint does not natively let you remove any default categories or sub-categories, although you are free to add and remove any custom sub-categories you want. Since many built-in categories may not be applicable to your financial setup, this creates unnecessary clutter when organizing your transactions. If you don't own a business or do not have kids, for example, there is no logical need to have those options always show up in a list.
 
-This script gives you control over these built-in categories. You can hide any sub-categories and even top-level categories that you want.
+This script gives you control over these built-in categories. You can hide any sub-categories and even top-level categories that you do not wish to see.
 
 
 
