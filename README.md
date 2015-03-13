@@ -1,12 +1,19 @@
-# Mint.com - Hide Default Categories
-This userscript lets you hide default built-in categories in mint.com. 
 
-## Table of Contents
-* [Purpose](#purpose)
-* [How to Use](#how-to-use)
-* [Features](#features)
-* [Installation Instructions](#installation-instructions)
-* [Known Issues](#known-issues)
+# Mint.com - Hide Default Categories
+This userscript lets you hide default built-in categories in mint.com.
+
+**Table of Contents**
+- [Purpose](#purpose)
+- [How to Use](#how-to-use)
+	- [Editing Hidden Categories](#editing-hidden-categories)
+	- [Visible Categories After Saving](#visible-categories-after-saving)
+	- [Script disabled - all categories](#script-disabled---all-categories)
+	- [Script enabled - custom categories](#script-enabled---custom-categories)
+- [Features](#features)
+	- [Hide Sub-Categories and Categories](#hide-sub-categories-and-categories)
+	- [Preferences Saved on Mint's Server](#preferences-saved-on-mints-server)
+- [Installation Instructions](#installation-instructions)
+- [Known Issues](#known-issues)
 
 ## Purpose
 Mint does not natively let you remove any default categories or sub-categories, although you are free to add and remove any custom sub-categories you want. Since many built-in categories may not be applicable to your financial setup, this creates unnecessary clutter when organizing your transactions. If you don't own a business or do not have kids, for example, there is no logical need to have those options always show up in a list.
