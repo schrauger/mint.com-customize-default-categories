@@ -2,7 +2,8 @@
 # Mint.com - Hide Default Categories
 This userscript lets you hide default built-in categories in mint.com.
 
-**Table of Contents**
+**Table of Contents** 
+[//]: # "*generated with [DocToc](http://doctoc.herokuapp.com/)*"
 - [Purpose](#purpose)
 - [How to Use](#how-to-use)
 	- [Editing Hidden Categories](#editing-hidden-categories)
