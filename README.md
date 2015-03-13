@@ -28,7 +28,7 @@ After the script is installed and enabled, you are able to set your preferences.
 
 Click on the top-right link that says `Edit Hidden Categories`. You will then see checkboxes next to each category and sub-category. Place a checkmark in the checkbox of the categories you want to hide. Their text will be crossed out. 
 
-When you have finished going through all the top level categories and choosing your selections, click on the top-right link that says `Save Hidden Categories`. Alternatively, click on the `I'm done` submit button.
+When you have finished going through all the top level categories and choosing your selections, click on the top-right link that says `Save Hidden Categories`. Alternatively, click on the <kbd>I'm done</kbd> submit button.
 
 The categories should now be hidden from the categories dropdown list.
 
