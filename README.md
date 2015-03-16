@@ -54,7 +54,7 @@ Built-in categories can be hidden completely. When hidden, the categories will n
 Hidden categories will never modify existing transactions. If a transaction is set to a hidden category, it will not change or hide itself. Also, the search box will still autocomplete all categories, and any other page on Mint will still show all categories. This script is merely a client-side change; if you disable the script, all categories will return to their default state.
 
 ### Preferences Saved on Mint's Server
-You can set up your preferences and know that they will be saved permanently on Mint's servers. As long as you are using a computer with this script installed, your hidden categories will persist across sessions and computers.
+Your preferences are saved on Mint's servers, so you only have to set up your choices once. When you install the script on another computer, your preferences will be automatically loaded. If you choose to change your settings later on, the changes will also be updated on your other devices. Your hidden categories will persist across all sessions and computers, and they will remain hidden as long as you are using a computer with this script installed.
 
 Technical Explanation: This script uses 3 custom category fields to save an ASCII bit array. They are saved in the `Uncategorized` category, and they begin with `#!1 `, `#!2 `, and `#!3 `. When the script is installed, they should not be visible. If you do see the fields (on a computer without the script enabled), please do not delete or modify the fields. Doing so will completely mess up your preferences on which categories you want hidden.
 
