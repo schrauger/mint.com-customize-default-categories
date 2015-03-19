@@ -5,7 +5,7 @@
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/*
-// @version 1.2.1
+// @version 1.3.0
 // @reqnhuire https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -477,15 +477,6 @@ function after_jquery() {
         }
     }
 
-    function add_dropdown_hook() {
-        //console.log('start dropdown');
-        //if ((jQuery('#txnEdit-category_input').length) && (!(jQuery('#txtEdit-category_input').hasClass('sgs-hook-added')))) {
-        jQuery('#txnEdit-category_input').addClass('sgs-hook-added');
-        jQuery('#txnEdit-category_input, #txnEdit-category_picker').off('click', mint_refresh);
-        jQuery('#txnEdit-category_input, #txnEdit-category_picker').on('click', mint_refresh);
-        //}
-    }
-
     /**
      * Hides our bit array custom categories permanently so the user won't accidentally mess with them.
      */
@@ -549,6 +540,31 @@ function after_jquery() {
         }
     }
     
+    function add_dropdown_hook() {
+        //console.log('start dropdown');
+        //if ((jQuery('#txnEdit-category_input').length) && (!(jQuery('#txtEdit-category_input').hasClass('sgs-hook-added')))) {
+        jQuery('#txnEdit-category_input').addClass('sgs-hook-added');
+        jQuery('#txnEdit-category_input, #txnEdit-category_picker').off('click', mint_refresh);
+        jQuery('#txnEdit-category_input, #txnEdit-category_picker').on('click', mint_refresh);
+        //}
+    }
+    
+    function google_search_fix(){
+        jQuery('#txnEdit-toggle').on('click', function(){
+            // get the text; don't try decoding the partial original search link
+            plain_search = jQuery('a.desc_link strong var').text();
+
+            // proper encoding
+            new_search = encodeURIComponent(plain_search);
+
+            // encoding changes spaces to %20, but that is deprecated now. urls take '+' instead.
+            new_search = new_search.replace(/%20/gi, '+');
+
+            // replace old url with new
+            jQuery('a.desc_link').attr('href', 'https://www.google.com/#q=' + new_search);
+        });
+    }
+    
     ////// Start jQuery Addon
     if (!(jQuery.fn.arrive)){
         /*
@@ -573,6 +589,7 @@ function after_jquery() {
     }
     ////// End jQuery Addon
     jQuery(document).arrive("#txnEdit-category_input", add_dropdown_hook);
+    jQuery(document).arrive("#txnEdit-toggle", google_search_fix);
 
 }
 
