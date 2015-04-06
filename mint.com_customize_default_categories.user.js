@@ -5,7 +5,7 @@
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/*
-// @version 1.3.0
+// @version 1.3.1
 // @reqnhuire https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -56,7 +56,7 @@ function after_jquery() {
         return categories;
     }
 
-// Somehow save any categories the user wants hidden.
+// Save any categories the user wants hidden.
 // This will be done by creating a custom subcategory in the 'uncategorized' category, where the name of this
 // subcategory will define which other categories to hide.
 // This way, if the UserScript is installed on multiple computers, the user sees their preferences synced.
@@ -89,7 +89,7 @@ function after_jquery() {
         var bit_string_category_count = 0; // only 8 categories per string. once this goes past 7, reset and use next string.
         var str_bit_array = str_bit_array_array[field_count]; // 3 custom fields with attributes
         // remove the first 4 characters (the unique ID plus a space)
-        str_bit_array = str_bit_array.substring(unique_id_length); // 0-based, meaning start at character 5 (inclusive)
+        str_bit_array = str_bit_array.substring(unique_id_length); // 0-based, meaning start at the fifth character (inclusive)
 
         // loop through each major category and its minor categories and mark them as hidden or not
         for (var category_major_count = 0, category_major_length = array_of_all_categories.length; category_major_count < category_major_length; category_major_count++) {
@@ -317,7 +317,6 @@ function after_jquery() {
     /**
      * Loop through all the category objects. If any are hidden,
      * add the proper CSS to hide the field.
-     * @TODO Create toggle to show hidden fields so they can be unhidden
      * @param default_categories
      */
     function process_hidden_categories(default_categories) {
