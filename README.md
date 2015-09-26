@@ -51,7 +51,7 @@ If you want to restore any hidden categories, follow these steps again, removing
 ### Hide Sub-Categories and Categories
 Built-in categories can be hidden completely. When hidden, the categories will not show up in the dropdown list of categories, nor in the popup dialog for editing custom categories.
 
-Hidden categories will never modify existing transactions. If a transaction is set to a hidden category, it will not change or hide itself. Also, the search box will still autocomplete all categories, and any other page on Mint will still show all categories. This script is merely a client-side change; if you disable the script, all categories will return to their default state.
+Hidden categories will never modify existing transactions. If a transaction is set to a category that is hidden, the transaction will not change or hide itself. Also, the search box will still autocomplete all categories, and any other page on Mint will still show all categories. This script is merely a client-side change; if you disable the script, all categories will return to their default state.
 
 ### Preferences Saved on Mint's Server
 Your preferences are saved on Mint's servers, so you only have to set up your choices once. When you install the script on another computer, your preferences will be automatically loaded. If you choose to change your settings later on, the changes will also be updated on your other devices. Your hidden categories will persist across all sessions and computers, and they will remain hidden as long as you are using a computer with this script installed.
