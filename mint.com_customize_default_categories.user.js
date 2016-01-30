@@ -5,7 +5,7 @@
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/*
-// @version 1.3.2
+// @version 1.3.3
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
 // @updateURL   https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -62,8 +62,8 @@ function after_jquery() {
 // Alternatively, a cookie could be used, but preferences would be specific to that device.
 
     /**
-     * @str_bit_array String A printable-ascii encoded bit array (values that can be saved in a custom category)
-     * @array_of_eight_categories Array 8 categories with their subcategories and
+     * @str_bit_array_array Array A printable-ascii encoded bit array (values that can be saved in a custom category)
+     * @array_of_all_categories Array 8*3 categories with their subcategories and
      *                                  ID, name, subcategories and is_hidden members
      *                                  for both the category and subcategories
      */
@@ -169,7 +169,6 @@ function after_jquery() {
 
     /**
      * Extracts the bit arrays from the saved custom category input box and puts all 3 into a string array.
-     * Also hides the three fields, since the user probably shouldn't mess with them directly (and they look weird).
      * @returns {Array}
      */
     function extract_mint_array() {
@@ -523,6 +522,8 @@ function after_jquery() {
         var default_categories = get_default_category_list();
         default_categories = decode_bit_array(str_bit_array_array, default_categories);
         process_hidden_categories(default_categories); // hides the appropriate fields
+        
+        //Hides our three fields, since the user probably shouldn't mess with them directly (and they look weird).
         hide_bit_array(); // comment this out in order to see the bit string data
     }
 
@@ -547,6 +548,11 @@ function after_jquery() {
         //}
     }
     
+    /**
+     * A bonus feature of this script: Fixes Mint's google search query.
+     * (If a transaction description contains a space, quote or other URI character, 
+     * mint.com doesn't encode it, which causes the google search link to be invalid.)
+     */
     function google_search_fix(){
         jQuery('#txnEdit-toggle').on('click', function(){
             // get the text; don't try decoding the partial original search link
