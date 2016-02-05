@@ -5,7 +5,7 @@
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/*
-// @version 1.3.3
+// @version 1.3.3.1
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
 // @updateURL   https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -611,7 +611,7 @@ function defer(method) {
         method();
     } else {
         setTimeout(function () {
-            defer(method)
+            defer(method);
         }, 50);
     }
 }
