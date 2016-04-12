@@ -14,11 +14,11 @@
 /*global jQuery*/
 (function () {
 function after_jquery() {
-    var bit_flags_per_char = 6; // using 01XXXXXX ASCII codes, which allows for 6 flags per character
-    var unique_id_length = 4; // the bit array starts with '#!1 ' or '#!2 ' or '#!3 '
+    var number_of_bit_arrays = 3; // use 3 arrays to store all preferences.
+    var unique_id_length = 4; // the bit array is prefixed with '#!1 ' or '#!2 ' or '#!3 ', which is 4 characters long
     var categories_per_string = 8; // with 20 characters per string, and 2 characters per category, we can fit 8 (plus the 4-char unique id)
     var characters_per_category = 2; // with 6 flags, this allows for 11 sub categories and 1 major category
-    var number_of_bit_arrays = 3; // use 3 arrays to store all preferences.
+    var bit_flags_per_char = 6; // using 01XXXXXX ASCII codes, which allows for 6 flags per character
     var category_id = 20; // save the custom fields in the 'uncategorized' major category, which has the id of 20
     var class_hidden = 'sgs-hide-from-mint'; // just a unique class; if an element has it, it will be hidden.
     var class_edit_mode = 'mint_edit_mode';
