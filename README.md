@@ -73,6 +73,7 @@ For more detailed steps, [follow these instructions][instructions] for your part
 
 ## Known Issues
 * New versions of Chrome prevent the script from installing.
- * Solution: Open a new window and go to the url "chrome:extensions". Enable `Developer mode` and refresh the page. Download the [script url][script] to your computer, then drag-and-drop the file from your computer onto the extensions page, where Chrome will then (finally!) let you install the script.
+ * Solution: Open a new window and go to the url "chrome:extensions". Then drag-and-drop the [script url][script] onto the extensions page, where Chrome will then let you install the script.
+ * Solution 2: If you don't have [TamperMonkey][tm_chrome] installed, follow these slightly more involved steps. Open a new window and go to the url "chrome:extensions". Enable `Developer mode` and refresh the page. Download the [script url][script] to your computer, then drag-and-drop the file from your computer onto the extensions page, where Chrome will then (finally!) let you install the script.
 * Mint mobile app shows all categories.
  * Solution: None. This script only works in desktop browsers. On mobile devices, the Mint app and web page will show all of the categories. 
