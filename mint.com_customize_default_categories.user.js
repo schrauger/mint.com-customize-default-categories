@@ -5,7 +5,7 @@
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/*
-// @version 1.3.3.1
+// @version 1.3.4
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
 // @updateURL   https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -315,6 +315,7 @@ function after_jquery() {
     /**
      * Loop through all the category objects. If any are hidden,
      * add the proper CSS to hide the field.
+     * Also, remove any line-throughs, in case a hidden category has been restored.
      * @param default_categories
      */
     function process_hidden_categories(default_categories) {
@@ -325,12 +326,17 @@ function after_jquery() {
                     //console.log('hide minor ' + default_categories[major_count].categories_minor[minor_count].id);
                     jQuery('#pop-categories-' + default_categories[major_count].categories_minor[minor_count].id).addClass(class_hidden);
                 }
+                jQuery('#menu-category-' + default_categories[major_count].categories_minor[minor_count].id).css('text-decoration', '');
+                jQuery('#pop-categories-' + default_categories[major_count].categories_minor[minor_count].id).css('text-decoration', '');
             }
             if (default_categories[major_count].is_hidden) {
                 jQuery('#menu-category-' + default_categories[major_count].id).addClass(class_hidden);
                 jQuery('#pop-categories-' + default_categories[major_count].id).addClass(class_hidden);
 
             }
+            jQuery('#menu-category-' + default_categories[major_count].id).css('text-decoration', '');
+            jQuery('#pop-categories-' + default_categories[major_count].id).css('text-decoration', '');
+            
         }
         hide_show_category(hs_action_hide);
     }
@@ -619,3 +625,4 @@ window.addEventListener('load', function () {
     defer(after_jquery);
 });
 }());
+
