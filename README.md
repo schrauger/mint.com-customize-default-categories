@@ -5,11 +5,12 @@ This userscript lets you hide default built-in categories in [mint.com](https://
 [//]: # "*generated with [DocToc](http://doctoc.herokuapp.com/)*"
 **Table of Contents** 
 - [Purpose](#purpose)
-- [How to Use](#how-to-use)
+- [Screenshots](#screenshots)
+	- [Script enabled - custom categories](#script-enabled---custom-categories)
+	- [Script disabled - all categories](#script-disabled---all-categories)
 	- [Editing Hidden Categories](#editing-hidden-categories)
 	- [Visible Categories After Saving](#visible-categories-after-saving)
-	- [Script disabled - all categories](#script-disabled---all-categories)
-	- [Script enabled - custom categories](#script-enabled---custom-categories)
+- [How to Use](#how-to-use)
 - [Features](#features)
 	- [Hide Sub-Categories and Categories](#hide-sub-categories-and-categories)
 	- [Preferences Saved on Mint's Server](#preferences-saved-on-mints-server)
@@ -21,7 +22,23 @@ Mint does not natively let you remove any default categories or sub-categories, 
 
 This script gives you control over these built-in categories. You can hide any sub-categories and even top-level categories that you do not wish to see.
 
+## Screenshots
+[custom]:  https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/images/dropdown-custom.png?raw=true "Customized visible categories"
+[all]:     https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/images/dropdown-all.png?raw=true "All categories shown"
+[editing]: https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/images/category-edit.png?raw=true "Editing hidden categories"
+[visible]: https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/images/category-view.png?raw=true "Customized visible categories"
 
+### Script enabled - custom categories
+![Custom categories dropdown][custom]
+
+### Script disabled - all categories
+![All categories dropdown][all]
+
+### Editing Hidden Categories
+![Editing categories][editing]
+
+### Visible Categories After Saving
+![Visible categories][visible]
 
 ## How to Use
 After the script is installed and enabled, you are able to set your preferences. On the [Transactions page](https://wwws.mint.com/transaction.event), click on the Category dropdown field of the current transaction, hover over any of the top level categories, and click on the sub-category link `Add/Edit Categories`. This is where you would go if you wanted to add a custom category (which Mint lets you do natively).
@@ -33,19 +50,6 @@ When you have finished going through all the top level categories and choosing y
 The categories should now be hidden from the categories dropdown list.
 
 If you want to restore any hidden categories, follow these steps again, removing the checkmark from the previously hidden categories. 
-
-[editing]: https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/images/category-edit.png?raw=true "Editing hidden categories"
-[visible]: https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/images/category-view.png?raw=true "Customized visible categories"
-[all]:     https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/images/dropdown-all.png?raw=true "All categories shown"
-[custom]:  https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/images/dropdown-custom.png?raw=true "Customized visible categories"
-### Editing Hidden Categories
-![Editing categories][editing]
-### Visible Categories After Saving
-![Visible categories][visible]
-### Script disabled - all categories
-![All categories dropdown][all]
-### Script enabled - custom categories
-![Custom categories dropdown][custom]
 
 ## Features
 ### Hide Sub-Categories and Categories
