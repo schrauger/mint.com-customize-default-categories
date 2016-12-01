@@ -5,7 +5,7 @@
 // @description Hide specified default built-in mint.com categories
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/*
-// @version 1.3.4
+// @version 1.4.0
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
 // @updateURL   https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -173,10 +173,10 @@ function after_jquery() {
      */
     function extract_mint_array() {
         var str_bit_array_array = [];
-        jQuery('#menu-category-' + category_id + ' ul li:contains("#!")').each(function () {
-            str_bit_array_array.push(jQuery(this).text());
-            //console.log('processing val is ' + jQuery(this).text());
-        });
+        for (var array_number = 1; array_number <= number_of_bit_arrays; array_number++){
+           str_bit_array_array.push(jQuery('#menu-category-' + category_id + ' ul li:contains("#!' + array_number + '"):first').text());
+            //console.log('processing val is ' + jQuery(this).text()); 
+        }
         return str_bit_array_array;
     }
 
@@ -240,7 +240,7 @@ function after_jquery() {
      */
     function upsert_field(bit_string) {
         var unique_id = bit_string.substr(0, unique_id_length);
-        var input_id = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]').prev().val();
+        var input_id = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]:first').prev().val();
         if (input_id) {
             update_field(bit_string);
         } else {
@@ -271,10 +271,10 @@ function after_jquery() {
         var hidden_token = JSON.parse(jQuery('#javascript-user').val()).token;
         var unique_id = bit_string.substr(0, unique_id_length);
 
-        var input = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]');
+        var input = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]:first');
         //console.log('setting input string from ' + input.val() + ' to ' + bit_string);
         input.val(bit_string); // set the value on the user's page manually (not needed for ajax, but needed for later processing)
-        jQuery('#menu-category-' + category_id + ' ul li:contains("' + unique_id + '")').text(bit_string);
+        //jQuery('#menu-category-' + category_id + ' ul li:contains("' + unique_id + '")').text(bit_string); //@TODO what is this line doing?
         /*    input.prop('value',bit_string);
          input.attr('value',bit_string);*/
         var input_id = input.prev().val();
