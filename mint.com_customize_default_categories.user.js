@@ -36,7 +36,7 @@ function after_jquery() {
         jQuery('#popup-cc-L1').find('> li').each(function () {
             var category_major = [];
             category_major.id = jQuery(this).attr('id').replace(/\D/g, ''); // number-only portion (they all start with 'pop-categories-'{number}
-            //console.log(caconsole.logtegory_major.id);
+            //console.log(category_major.id);
             category_major.name = jQuery(this).children('a').text();
             category_major.categories_minor = [];
             category_major.is_hidden = jQuery(this).hasClass(class_hidden);
