@@ -6,7 +6,7 @@
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/*
 // @include https://mint.intuit.com/*
-// @version 1.4.1
+// @version 1.4.3
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
 // @updateURL   https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -234,6 +234,13 @@ function after_jquery() {
         return str_bit_array_array;
     }
 
+    function clean_up_extra_fields(bit_string) {
+        var unique_id = bit_string.substr(0, unique_id_length);
+        jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]:not(:first)').each(function () {
+            var input_id = jQuery(this).prev().val();
+            delete_field(input_id);
+        });
+    }
 
     /**
      * Will update or insert as needed.
@@ -295,10 +302,8 @@ function after_jquery() {
         );
     }
 
-    function delete_field(bit_string) {
+    function delete_field(input_id) {
         var hidden_token = JSON.parse(jQuery('#javascript-user').val()).token;
-        var unique_id = bit_string.substr(0, unique_id_length);
-        var input_id = jQuery('ul.popup-cc-L2-custom > li > input[value^="' + unique_id + '"]').prev().val();
         var data = {
             catId: input_id,
             task: 'D',
@@ -477,7 +482,6 @@ function after_jquery() {
             jQuery('#pop-categories-submit, #pop-categories-close').click(function () {
                 mint_refresh();
             });
-
         }
     }
 
@@ -487,7 +491,6 @@ function after_jquery() {
     function hide_bit_array() {
         jQuery('input[value^="#!"]').parent().hide();
         jQuery('li[id^="menu-category-"] a:contains("#!")').parent().hide();
-
     }
 
     /**
@@ -529,7 +532,7 @@ function after_jquery() {
         var default_categories = get_default_category_list();
         default_categories = decode_bit_array(str_bit_array_array, default_categories);
         process_hidden_categories(default_categories); // hides the appropriate fields
-        
+
         //Hides our three fields, since the user probably shouldn't mess with them directly (and they look weird).
         hide_bit_array(); // comment this out in order to see the bit string data
     }
@@ -542,6 +545,7 @@ function after_jquery() {
         var default_categories = get_default_category_list();
         var bit_array_array = encode_bit_array(default_categories);
         for (var i = 0; i < bit_array_array.length; i++) {
+            clean_up_extra_fields(bit_array_array[i]); // delete any extra preference fields my older script created
             upsert_field(bit_array_array[i]);
         }
     }
