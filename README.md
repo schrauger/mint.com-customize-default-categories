@@ -63,9 +63,7 @@ Your preferences are saved on Mint's servers, so you only have to set up your ch
 Technical Explanation: This script uses 3 custom category fields to save an ASCII bit array. They are saved in the `Uncategorized` category, and they begin with `#!1 `, `#!2 `, and `#!3 `. When the script is installed, they should not be visible. If you do see the fields (on a computer without the script enabled), please do not delete or modify the fields. Doing so will completely mess up your preferences on which categories you want hidden.
 
 ## Installation Instructions
-The easiest way to install the script is to first have [GreaseMonkey][greasemonkey] ([Firefox][gm_firefox]) or [TamperMonkey][tampermonkey] ([Chrome][tm_chrome], [Safari][tm_safari], [Opera][tm_opera]). If you have those addons installed already, simply [open the script][script] and follow the prompts to install it.
 
-For more detailed steps, [follow these instructions][instructions] for your particular browser.
 [greasemonkey]: http://www.greasespot.net/
 [gm_firefox]: https://addons.mozilla.org/en-us/firefox/addon/greasemonkey/
 [tampermonkey]: https://tampermonkey.net/index.php
@@ -74,6 +72,10 @@ For more detailed steps, [follow these instructions][instructions] for your part
 [tm_opera]: https://addons.opera.com/en/extensions/details/tampermonkey-beta/
 [script]: https://github.com/schrauger/mint.com-customize-default-categories/raw/master/mint.com_customize_default_categories.user.js
 [instructions]: http://stackapps.com/tags/script/info
+
+The easiest way to install the script is to first have [GreaseMonkey][greasemonkey] ([Firefox][gm_firefox]) or [TamperMonkey][tampermonkey] ([Chrome][tm_chrome], [Safari][tm_safari], [Opera][tm_opera]). If you have those addons installed already, simply [open the script][script] and follow the prompts to install it.
+
+For more detailed steps, [follow these instructions][instructions] for your particular browser.
 
 ## Known Issues
 * New versions of Chrome prevent the script from installing.
