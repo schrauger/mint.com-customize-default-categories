@@ -76,8 +76,12 @@ For more detailed steps, [follow these instructions][instructions] for your part
 [tm_opera]: https://addons.opera.com/en/extensions/details/tampermonkey-beta/
 [script]: https://github.com/schrauger/mint.com-customize-default-categories/raw/master/mint.com_customize_default_categories.user.js
 [instructions]: http://stackapps.com/tags/script/info
+[greasemonkey_issue]: https://github.com/greasemonkey/greasemonkey/issues/2631
 
 ## Known Issues
+* Firefox 56 and higher doesn't prompt to install the script when using GreaseMonkey
+  * Solution: For now, manually copy and paste the script source into a new script. In GreaseMonkey, click `New user script...`. Delete the default contents of the new file. Then open up the [mint script][script], select the entire text, and copy and paste it into the new script file. It should automatically save, so you can close the tab after pasting.
+  * Solution 2: Install [TamperMonkey][tampermonkey] for Firefox. There's [an issue with GreaseMonkey][greasemonkey_issue] that currently prevents GitHub userscripts from showing an installation window, but TamperMonkey doesn't appear affected.
 * New versions of Chrome prevent the script from installing.
   * Solution: Open a new window and go to the url "chrome:extensions". Then drag-and-drop the [script url][script] onto the extensions page, where Chrome will then let you install the script.
   * Solution 2: If you don't have [TamperMonkey][tm_chrome] installed, follow these slightly more involved steps. Open a new window and go to the url "chrome:extensions". Enable `Developer mode` and refresh the page. Download the [script url][script] to your computer, then drag-and-drop the file from your computer onto the extensions page, where Chrome will then (finally!) let you install the script.
