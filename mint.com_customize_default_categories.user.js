@@ -6,7 +6,7 @@
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/*
 // @include https://mint.intuit.com/*
-// @version 1.4.3.1
+// @version 1.4.3.2
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
 // @updateURL   https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -513,7 +513,7 @@ function after_jquery() {
         jQuery('li[id^="menu-category-"] a:contains("#!")').parent().hide();
         jQuery('li[id^="menu-category-"] a:contains("#!")').each(function( index ) {
             // use the new css global stylesheet function to hide the element as well.
-            css_hide_element(jQuery(this).parent().attr('id'));
+            css_hide_element("#" + jQuery(this).parent().attr('id'));
         });
     }
 
