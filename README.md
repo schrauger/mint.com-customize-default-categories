@@ -63,9 +63,11 @@ Your preferences are saved on Mint's servers, so you only have to set up your ch
 Technical Explanation: This script uses 3 custom category fields to save an ASCII bit array. They are saved in the `Uncategorized` category, and they begin with `#!1 `, `#!2 `, and `#!3 `. When the script is installed, they should not be visible. If you do see the fields (on a computer without the script enabled), please do not delete or modify the fields. Doing so will completely mess up your preferences on which categories you want hidden.
 
 ## Installation Instructions
+
 The easiest way to install the script is to first have [GreaseMonkey][greasemonkey] ([Firefox][gm_firefox]) or [TamperMonkey][tampermonkey] ([Chrome][tm_chrome], [Safari][tm_safari], [Opera][tm_opera]). If you have those addons installed already, simply [open the script][script] and follow the prompts to install it.
 
 For more detailed steps, [follow these instructions][instructions] for your particular browser.
+
 [greasemonkey]: http://www.greasespot.net/
 [gm_firefox]: https://addons.mozilla.org/en-us/firefox/addon/greasemonkey/
 [tampermonkey]: https://tampermonkey.net/index.php
@@ -74,10 +76,14 @@ For more detailed steps, [follow these instructions][instructions] for your part
 [tm_opera]: https://addons.opera.com/en/extensions/details/tampermonkey-beta/
 [script]: https://github.com/schrauger/mint.com-customize-default-categories/raw/master/mint.com_customize_default_categories.user.js
 [instructions]: http://stackapps.com/tags/script/info
+[greasemonkey_issue]: https://github.com/greasemonkey/greasemonkey/issues/2631
 
 ## Known Issues
+* Firefox 56 and higher doesn't prompt to install the script when using GreaseMonkey
+  * Solution: For now, manually copy and paste the script source into a new script. In GreaseMonkey, click `New user script...`. Delete the default contents of the new file. Then open up the [mint script][script], select the entire text, and copy and paste it into the new script file. It should automatically save, so you can close the tab after pasting.
+  * Solution 2: Install [TamperMonkey][tampermonkey] for Firefox. There's [an issue with GreaseMonkey][greasemonkey_issue] that currently prevents GitHub userscripts from showing an installation window, but TamperMonkey doesn't appear affected.
 * New versions of Chrome prevent the script from installing.
- * Solution: Open a new window and go to the url "chrome:extensions". Then drag-and-drop the [script url][script] onto the extensions page, where Chrome will then let you install the script.
- * Solution 2: If you don't have [TamperMonkey][tm_chrome] installed, follow these slightly more involved steps. Open a new window and go to the url "chrome:extensions". Enable `Developer mode` and refresh the page. Download the [script url][script] to your computer, then drag-and-drop the file from your computer onto the extensions page, where Chrome will then (finally!) let you install the script.
+  * Solution: Open a new window and go to the url "chrome:extensions". Then drag-and-drop the [script url][script] onto the extensions page, where Chrome will then let you install the script.
+  * Solution 2: If you don't have [TamperMonkey][tm_chrome] installed, follow these slightly more involved steps. Open a new window and go to the url "chrome:extensions". Enable `Developer mode` and refresh the page. Download the [script url][script] to your computer, then drag-and-drop the file from your computer onto the extensions page, where Chrome will then (finally!) let you install the script.
 * Mint mobile app shows all categories.
- * Solution: None. This script only works in desktop browsers. On mobile devices, the Mint app and web page will show all of the categories. 
+  * Solution: None. This script only works in desktop browsers. On mobile devices, the Mint app and web page will show all of the categories. 
