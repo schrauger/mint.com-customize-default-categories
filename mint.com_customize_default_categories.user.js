@@ -27,6 +27,8 @@ function after_jquery() {
     var hs_action_hide = 'hide';
     var hs_action_show = 'show';
     var hs_action_edit = 'edit';
+    
+    var sgs_style_sheet = create_style_sheet();
 
 // Need to define all categories and subcategories, along with their ID. Create this list dynamically.
     function get_default_category_list() {
@@ -325,10 +327,14 @@ function after_jquery() {
      * @param default_categories
      */
     function process_hidden_categories(default_categories) {
+        clearSGSStyle(); // clear css rules first. these rules define elements that are hidden, based on their id.
+        
         for (var major_count = 0; major_count < default_categories.length; major_count++) {
             for (var minor_count = 0; minor_count < default_categories[major_count].categories_minor.length; minor_count++) {
                 if (default_categories[major_count].categories_minor[minor_count].is_hidden) {
                     jQuery('#menu-category-' + default_categories[major_count].categories_minor[minor_count].id).addClass(class_hidden);
+                    css_hide_element('#menu-category-' + default_categories[major_count].categories_minor[minor_count].id);
+                    
                     //console.log('hide minor ' + default_categories[major_count].categories_minor[minor_count].id);
                     jQuery('#pop-categories-' + default_categories[major_count].categories_minor[minor_count].id).addClass(class_hidden);
                 }
@@ -346,6 +352,19 @@ function after_jquery() {
 
         }
         hide_show_category(hs_action_hide);
+    }
+    
+    
+    /**
+     * Recently, mint has been removing all classes of elements after the dropdown
+     * is shown. This unfortunately removes my hiding class, causing subcategories
+     * to be shown after briefly being hidden.
+     * Therefore, this function was created to make a global css rule to hide
+     * and show elements based on their id, rather than by adding classes.
+     */
+    function css_hide_element(element_id){
+        addSGSStyle(element_id, 'display: none');
+        console.log('hiding element ' + element_id);
     }
 
     /**
@@ -443,7 +462,7 @@ function after_jquery() {
                                                      });
             // add checkbox event. when checked add the 'hidden' class (which is scanned on save)
             jQuery('input.hide_show_checkbox').click(function () {
-                parent_id = jQuery(this).parent().attr('id').replace(/\D/g, '');
+                var parent_id = jQuery(this).parent().attr('id').replace(/\D/g, '');
                 if (jQuery(this).is(':checked')) {
                     jQuery('#menu-category-' + parent_id).addClass(class_hidden);
                     jQuery('#pop-categories-' + parent_id).addClass(class_hidden);
@@ -579,6 +598,56 @@ function after_jquery() {
             // replace old url with new
             jQuery('a.desc_link').attr('href', 'https://www.google.com/#q=' + new_search);
         });
+    }
+    
+    /**
+     * Function to add a global css style to a page.
+     * https://davidwalsh.name/add-rules-stylesheets
+     * This function is called once, at the top of the code, storing
+     * the new stylesheet reference in a script-global variable.
+     */
+    function create_style_sheet(){
+        // Create the <style> tag
+        var style = document.createElement("style");
+
+        // Add a media (and/or media query) here if you'd like!
+        // style.setAttribute("media", "screen")
+        // style.setAttribute("media", "only screen and (max-width : 1024px)")
+
+        // WebKit hack :(
+        style.appendChild(document.createTextNode(""));
+
+        // Add the <style> element to the page
+        document.head.appendChild(style);
+
+        return style.sheet;   
+    }
+    
+    // Cross compatible function to insert a rule. Index is optional.
+    function _addCSSRule(sheet, selector, rules, index) {
+        if("insertRule" in sheet) {
+            sheet.insertRule(selector + "{" + rules + "}", index);
+        }
+        else if("addRule" in sheet) {
+            sheet.addRule(selector, rules, index);
+        }
+    }
+    
+    /*
+     * This is the actual function called to hide an element via its id.
+     */
+    function addSGSStyle(css_selector, css_rule) {
+        _addCSSRule(sgs_style_sheet, css_selector, css_rule);
+    }
+    
+    /*
+     * Rather than removing specific rules, we just wipe the entire sheet out.
+     * Afterwards, the rules are recreated to fit the new preferences.
+     */
+    function clearSGSStyle() {
+        while (sgs_style_sheet.length > 0){
+            sgs_style_sheet.deleteRule(0);
+        }
     }
     
     ////// Start jQuery Addon
