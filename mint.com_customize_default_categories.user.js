@@ -6,7 +6,7 @@
 // @homepage https://github.com/schrauger/mint.com-customize-default-categories
 // @include https://*.mint.com/*
 // @include https://mint.intuit.com/*
-// @version 1.4.3.2
+// @version 1.4.4
 // @grant none
 // @downloadURL https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
 // @updateURL   https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
@@ -364,7 +364,6 @@ function after_jquery() {
      */
     function css_hide_element(element_id){
         addSGSStyle(element_id, 'display: none');
-        console.log('hiding element ' + element_id);
     }
 
     /**
@@ -629,12 +628,14 @@ function after_jquery() {
     
     // Cross compatible function to insert a rule. Index is optional.
     function _addCSSRule(sheet, selector, rules, index) {
+
         if("insertRule" in sheet) {
             sheet.insertRule(selector + "{" + rules + "}", index);
         }
         else if("addRule" in sheet) {
             sheet.addRule(selector, rules, index);
         }
+
     }
     
     /*
@@ -649,9 +650,9 @@ function after_jquery() {
      * Afterwards, the rules are recreated to fit the new preferences.
      */
     function clearSGSStyle() {
-        console.log("clearing. style length: " + sgs_style_sheet.length);
-        while (sgs_style_sheet.length > 0){
-            console.log(" rule to be cleared: " + sgs_style_sheet.cssRules[0]);
+
+        while (sgs_style_sheet.cssRules.length > 0){
+
             sgs_style_sheet.deleteRule(0);
         }
     }
