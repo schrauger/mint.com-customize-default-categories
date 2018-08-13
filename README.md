@@ -64,9 +64,11 @@ Technical Explanation: This script uses 3 custom category fields to save an ASCI
 
 ## Installation Instructions
 
-The easiest way to install the script is to first have [GreaseMonkey][greasemonkey] ([Firefox][gm_firefox]) or [TamperMonkey][tampermonkey] ([Chrome][tm_chrome], [Safari][tm_safari], [Opera][tm_opera]). If you have those addons installed already, simply [open the script][script] and follow the prompts to install it.
+The easiest way to install the script is from the [Firefox App Store][firefox_app_url] or the [Chrome App Store][chrome_app_url].
 
-There is now a native Chrome extension. Simply go to the Chrome [app store page][chrome_app_url] and install it. The extesnion is merely a wrapper of the script, so if you already have the userscript installed, the extension is not needed.
+Another way to install the script is to first have [GreaseMonkey][greasemonkey] ([Firefox][gm_firefox]) or [TamperMonkey][tampermonkey] ([Chrome][tm_chrome], [Safari][tm_safari], [Opera][tm_opera]). If you have those addons installed already, simply [open the script][script] and follow the prompts to install it.
+
+There are no differences between the userscript and the native browser extensions. The extension is merely a wrapper of the script.
 
 For more detailed steps, [follow these instructions][instructions] for your particular browser.
 
@@ -80,6 +82,7 @@ For more detailed steps, [follow these instructions][instructions] for your part
 [instructions]: http://stackapps.com/tags/script/info
 [greasemonkey_issue]: https://github.com/greasemonkey/greasemonkey/issues/2631
 [chrome_app_url]: https://chrome.google.com/webstore/detail/mintcom-customize-default/dejgfdkemnimadjmkgicolejmhnkabig
+[firefox_app_url]: https://addons.mozilla.org/en-US/firefox/addon/mint-com-customize-categories/
 
 ## Known Issues
 * Firefox 56 and higher doesn't prompt to install the script when using GreaseMonkey
