@@ -66,6 +66,8 @@ Technical Explanation: This script uses 3 custom category fields to save an ASCI
 
 The easiest way to install the script is to first have [GreaseMonkey][greasemonkey] ([Firefox][gm_firefox]) or [TamperMonkey][tampermonkey] ([Chrome][tm_chrome], [Safari][tm_safari], [Opera][tm_opera]). If you have those addons installed already, simply [open the script][script] and follow the prompts to install it.
 
+There is now a native Chrome extension. Simply go to the Chrome [app store page][chrome_app_url] and install it. The extesnion is merely a wrapper of the script, so if you already have the userscript installed, the extension is not needed.
+
 For more detailed steps, [follow these instructions][instructions] for your particular browser.
 
 [greasemonkey]: http://www.greasespot.net/
@@ -77,11 +79,13 @@ For more detailed steps, [follow these instructions][instructions] for your part
 [script]: https://github.com/schrauger/mint.com-customize-default-categories/raw/master/mint.com_customize_default_categories.user.js
 [instructions]: http://stackapps.com/tags/script/info
 [greasemonkey_issue]: https://github.com/greasemonkey/greasemonkey/issues/2631
+[chrome_app_url]: https://chrome.google.com/webstore/detail/mintcom-customize-default/dejgfdkemnimadjmkgicolejmhnkabig
 
 ## Known Issues
 * Firefox 56 and higher doesn't prompt to install the script when using GreaseMonkey
   * Solution: For now, manually copy and paste the script source into a new script. In GreaseMonkey, click `New user script...`. Delete the default contents of the new file. Then open up the [mint script][script], select the entire text, and copy and paste it into the new script file. It should automatically save, so you can close the tab after pasting.
   * Solution 2: Install [TamperMonkey][tampermonkey] for Firefox. There's [an issue with GreaseMonkey][greasemonkey_issue] that currently prevents GitHub userscripts from showing an installation window, but TamperMonkey doesn't appear affected.
+  * Solution 3: Install the [chrome extension][chrome_app_url] instead of the userscript.
 * New versions of Chrome prevent the script from installing.
   * Solution: Open a new window and go to the url "chrome:extensions". Then drag-and-drop the [script url][script] onto the extensions page, where Chrome will then let you install the script.
   * Solution 2: If you don't have [TamperMonkey][tm_chrome] installed, follow these slightly more involved steps. Open a new window and go to the url "chrome:extensions". Enable `Developer mode` and refresh the page. Right-click the [script url][script] and save it to your computer, then drag-and-drop the file from your computer onto the extensions page, where Chrome will then (finally!) let you install the script.
