@@ -75,7 +75,7 @@ For more detailed steps, [follow these instructions][instructions] for your part
 [tm_safari]: https://tampermonkey.net/index.php?ext=dhdg&browser=safari
 [tm_opera]: https://addons.opera.com/en/extensions/details/tampermonkey-beta/
 [script]: https://github.com/schrauger/mint.com-customize-default-categories/raw/master/mint.com_customize_default_categories.user.js
-[script_raw]: https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js
+[script_raw]: https://raw.githubusercontent.com/schrauger/mint.com-customize-default-categories/master/mint.com_customize_default_categories.user.js?raw=true
 [instructions]: http://stackapps.com/tags/script/info
 [greasemonkey_issue]: https://github.com/greasemonkey/greasemonkey/issues/2631
 
