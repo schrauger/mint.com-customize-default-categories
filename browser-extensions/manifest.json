@@ -1,7 +1,7 @@
 {
   "name": "Mint.com - Customize Default Categories",
   "description": "Hide built-in categories on Mint.com",
-  "version": "1.4.4.1",
+  "version": "1.4.5",
   "manifest_version": 2,
   "icons": {
     "128": "icon128.png"
