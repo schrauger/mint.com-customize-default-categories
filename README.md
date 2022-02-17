@@ -2,6 +2,12 @@
 # Mint.com - Hide Default Categories
 This addon lets you hide default built-in categories in [mint.com](https://www.mint.com).
 
+Click your browser to install the extension
+
+[![Chrome addon](images/chrome.png "Chrome store extension")][chrome_app_url]
+[![Firefox addon](images/firefox.png "Firefox store extension")][firefox_app_url]
+
+
 [//]: # "*generated with [DocToc](http://doctoc.herokuapp.com/)*"
 **Table of Contents** 
 - [Purpose](#purpose)
@@ -83,6 +89,12 @@ For more detailed steps, [follow these instructions][instructions] for your part
 [greasemonkey_issue]: https://github.com/greasemonkey/greasemonkey/issues/2631
 [chrome_app_url]: https://chrome.google.com/webstore/detail/mintcom-customize-default/dejgfdkemnimadjmkgicolejmhnkabig
 [firefox_app_url]: https://addons.mozilla.org/en-US/firefox/addon/mint-com-customize-categories/
+[edge_app_url]:
+[safari_app_url]:
+[brave_app_url]:
+[opera_app_url]:
+
+
 
 ## Known Issues
 * Firefox 56 and higher doesn't prompt to install the script when using GreaseMonkey
