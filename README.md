@@ -6,7 +6,7 @@ Click your browser to install the extension
 
 [![Chrome addon](images/chrome.png "Chrome store extension")][chrome_app_url]
 [![Firefox addon](images/firefox.png "Firefox store extension")][firefox_app_url]
-
+[![Brave addon](images/brave.png "Brave tutorial for installing chrome extensions")][brave_app_url]
 
 [//]: # "*generated with [DocToc](http://doctoc.herokuapp.com/)*"
 **Table of Contents** 
@@ -91,7 +91,7 @@ For more detailed steps, [follow these instructions][instructions] for your part
 [firefox_app_url]: https://addons.mozilla.org/en-US/firefox/addon/mint-com-customize-categories/
 [edge_app_url]:
 [safari_app_url]:
-[brave_app_url]:
+[brave_app_url]: https://brave.com/learn/installing-chrome-extensions/
 [opera_app_url]:
 
 
