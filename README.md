@@ -2,6 +2,9 @@
 # Mint.com - Hide Default Categories
 This addon lets you hide default built-in categories in [mint.com](https://www.mint.com).
 
+## Known Issue
+* 2022-06-03 Mint redesign. The Mint.com website was majorly redesigned, which has caused this plugin to break. I'm working on updating it to work with the new website layout.
+
 Click your browser to install the extension
 
 [![Chrome addon](images/chrome.png "Chrome store extension")][chrome_app_url]
@@ -97,6 +100,8 @@ For more detailed steps, [follow these instructions][instructions] for your part
 
 
 ## Known Issues
+* 2022-06 Mint redesign. Mint.com website was majorly redesigned, which has caused this plugin to break. I'm working on updating it to work with the new website layout.
+ 
 * Firefox 56 and higher doesn't prompt to install the script when using GreaseMonkey
   * Solution: For now, manually copy and paste the script source into a new script. In GreaseMonkey, click `New user script...`. Delete the default contents of the new file. Then open up the [mint script][script], select the entire text, and copy and paste it into the new script file. It should automatically save, so you can close the tab after pasting.
   * Solution 2: Install [TamperMonkey][tampermonkey] for Firefox. There's [an issue with GreaseMonkey][greasemonkey_issue] that currently prevents GitHub userscripts from showing an installation window, but TamperMonkey doesn't appear affected.
