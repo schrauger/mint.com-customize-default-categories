@@ -1,3 +1,5 @@
+# Archived in 2025
+The website mint.com was shut down after being transferred to Intuit. I have delisted the plugin from the browser repositories.
 
 # Mint.com - Hide Default Categories
 This addon lets you hide default built-in categories in [mint.com](https://www.mint.com).
